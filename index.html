@@ -1,0 +1,1404 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BSC TI — Cruz Roja Valle del Cauca 2026–2030</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800&family=Libre+Franklin:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --red: #c0102a;
+        --red-dark: #7a0018;
+        --mv-bg: #163578;
+        --mv-dark: #0e2458;
+        --oe-bg: #e8b800;
+        --oe-dark: #b89000;
+        --c-bg: #a04028;
+        --c-light: #fff3ee;
+        --p-bg: #2e6680;
+        --p-light: #edf5fa;
+        --a-bg: #7a3a52;
+        --a-light: #fdf0f5;
+        --f-bg: #276040;
+        --f-light: #edf8f2;
+        --border: #c8cdd4;
+        --text: #1a1a1a;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Libre Franklin", sans-serif;
+        background: #d4d8dc;
+        color: var(--text);
+        min-width: 1420px;
+      }
+
+      /* ─── HEADER ─── */
+      .hdr {
+        background: linear-gradient(
+          108deg,
+          var(--red) 0%,
+          var(--red-dark) 55%,
+          #3a000a 100%
+        );
+        color: #fff;
+        padding: 20px 40px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .hdr-cross {
+        font-size: 48px;
+        font-weight: 900;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+      .hdr-main h1 {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 19px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+      .hdr-main p {
+        font-size: 11.5px;
+        opacity: 0.78;
+        margin-top: 4px;
+      }
+      .hdr-nit {
+        margin-left: 28px;
+        padding-left: 28px;
+        border-left: 1px solid rgba(255, 255, 255, 0.3);
+        font-size: 11px;
+        opacity: 0.75;
+        line-height: 1.7;
+      }
+      .hdr-kpis {
+        margin-left: auto;
+        display: flex;
+        gap: 22px;
+        flex-shrink: 0;
+      }
+      .hdr-kpi {
+        text-align: center;
+      }
+      .hdr-kpi .v {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 22px;
+        font-weight: 800;
+        color: #ffb0bb;
+      }
+      .hdr-kpi .l {
+        font-size: 9px;
+        opacity: 0.75;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      /* ─── LEGEND ─── */
+      .legend {
+        background: #1c1c1c;
+        display: flex;
+        align-items: center;
+        padding: 8px 40px;
+        gap: 28px;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .leg-line {
+        width: 28px;
+        height: 2px;
+      }
+      .leg-solid {
+        background: #7aacd4;
+      }
+      .leg-dash {
+        background: repeating-linear-gradient(
+          90deg,
+          #d4a060 0,
+          #d4a060 5px,
+          transparent 5px,
+          transparent 10px
+        );
+      }
+      .leg-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+      }
+
+      /* ─── OUTER ─── */
+      .outer {
+        padding: 18px 18px 18px 24px;
+      }
+      .layout {
+        display: flex;
+        gap: 0;
+        align-items: stretch;
+      }
+      .bsc-wrap {
+        position: relative;
+        flex: 1;
+      }
+
+      /* Red upward arrow */
+      .arrow-col {
+        width: 36px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 6px;
+        gap: 0;
+      }
+      .arrow-head {
+        width: 0;
+        height: 0;
+        border-left: 16px solid transparent;
+        border-right: 16px solid transparent;
+        border-bottom: 28px solid var(--red);
+      }
+      .arrow-shaft {
+        width: 12px;
+        flex: 1;
+        background: var(--red);
+      }
+      .arrow-lbl {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 9px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--red);
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        padding: 8px 0;
+        opacity: 0.8;
+      }
+
+      /* ─── SVG overlay ─── */
+      #svg-a {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 10;
+        overflow: visible;
+      }
+
+      /* ─── TABLE ─── */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      colgroup col:nth-child(1) {
+        width: 48px;
+      }
+      colgroup col:nth-child(2) {
+        width: 590px;
+      }
+      colgroup col:nth-child(3) {
+        width: 208px;
+      }
+      colgroup col:nth-child(4) {
+        width: 152px;
+      }
+      colgroup col:nth-child(5) {
+        width: auto;
+      }
+
+      /* col headers */
+      .ch th {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 10px 13px;
+        text-align: center;
+        border: 1px solid #909090;
+      }
+      .ch-e {
+        background: #181818;
+      }
+      .ch-g {
+        background: #246040;
+        color: #fff;
+      }
+
+      /* ─── ROW LABEL CELL ─── */
+      .lc {
+        padding: 0;
+        border: 1px solid var(--border);
+        vertical-align: middle;
+        width: 48px;
+      }
+      .rl {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 2.2px;
+        text-transform: uppercase;
+        color: #fff;
+        padding: 8px 0;
+      }
+
+      /* ─── NODE CELL ─── */
+      .nc {
+        padding: 14px 18px;
+        vertical-align: middle;
+        border: 1px solid var(--border);
+      }
+      .nh {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: nowrap;
+      }
+
+      /* ─── NODES ─── */
+      .node {
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 9.8px;
+        font-weight: 700;
+        padding: 7px 10px;
+        line-height: 1.3;
+        border: 2px solid transparent;
+        width: 128px;
+        height: 62px;
+        cursor: default;
+        flex-shrink: 0;
+        position: relative;
+        z-index: 3;
+        transition:
+          transform 0.18s,
+          box-shadow 0.2s;
+        font-family: "Libre Franklin", sans-serif;
+      }
+      .node:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+      }
+
+      /* tooltip */
+      .node[data-tip]:hover::after {
+        content: attr(data-tip);
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(10, 10, 10);
+        color: #fff;
+        font-size: 9px;
+        font-weight: 500;
+        line-height: 1.5;
+        padding: 5px 9px;
+        border-radius: 4px;
+        white-space: nowrap;
+        z-index: 9999;
+        pointer-events: none;
+        max-width: 220px;
+        white-space: normal;
+        text-align: center;
+      }
+
+      /* ─── DATA CELLS ─── */
+      .dc {
+        padding: 10px 12px;
+        vertical-align: top;
+        border: 1px solid var(--border);
+        font-size: 10px;
+        line-height: 1.55;
+      }
+      .mt {
+        display: block;
+        font-size: 8.5px;
+        font-weight: 700;
+        letter-spacing: 1.1px;
+        text-transform: uppercase;
+        color: var(--red);
+        margin-bottom: 2px;
+      }
+      .mv {
+        font-size: 9.5px;
+        color: #333;
+        line-height: 1.5;
+        margin-bottom: 7px;
+      }
+      .pill {
+        display: inline-block;
+        background: var(--red);
+        color: #fff;
+        font-size: 8px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 20px;
+        margin-bottom: 3px;
+        letter-spacing: 0.4px;
+      }
+      .pt {
+        font-size: 9.5px;
+        color: #333;
+        margin-bottom: 6px;
+        line-height: 1.4;
+      }
+      .ii {
+        font-size: 9.5px;
+        color: #333;
+        padding: 3px 0 3px 12px;
+        border-bottom: 1px dashed #ccc;
+        position: relative;
+        line-height: 1.35;
+      }
+      .ii:last-child {
+        border-bottom: none;
+      }
+      .ii::before {
+        content: "→";
+        color: var(--red);
+        font-weight: 700;
+        position: absolute;
+        left: 0;
+      }
+      .ii.warn::before {
+        content: "⚠";
+        color: #c07020;
+      }
+      .ii.star::before {
+        content: "★";
+        color: #1a7a40;
+      }
+
+      /* ═══════════ PERSPECTIVE COLORS ═══════════ */
+
+      /* Misión / Visión — blue */
+      .row-mv .lc {
+        background: var(--mv-dark);
+      }
+      .row-mv .nc {
+        background: #e8f0ff;
+      }
+      .row-mv .dc {
+        background: #f2f5ff;
+      }
+      .row-mv .node {
+        background: #6090d8;
+        border-color: var(--mv-bg);
+        color: #040e28;
+      }
+
+      /* Objetivo Estratégico — gold */
+      .row-oe .lc {
+        background: #9a7800;
+      }
+      .row-oe .nc {
+        background: #fffbe0;
+      }
+      .row-oe .dc {
+        background: #fffde8;
+      }
+      .row-oe .node {
+        background: #e8c830;
+        border-color: var(--oe-dark);
+        color: #3a2800;
+      }
+
+      /* Clientes — terracotta */
+      .row-c .lc {
+        background: var(--c-bg);
+      }
+      .row-c .nc {
+        background: var(--c-light);
+      }
+      .row-c .dc {
+        background: #fff8f5;
+      }
+      .row-c .node {
+        background: #d87050;
+        border-color: var(--c-bg);
+        color: #260800;
+      }
+
+      /* Procesos — steel blue */
+      .row-p .lc {
+        background: var(--p-bg);
+      }
+      .row-p .nc {
+        background: var(--p-light);
+      }
+      .row-p .dc {
+        background: #f2f8fc;
+      }
+      .row-p .node {
+        background: #5898b8;
+        border-color: var(--p-bg);
+        color: #040e1a;
+      }
+
+      /* Aprendizaje — mauve */
+      .row-a .lc {
+        background: var(--a-bg);
+      }
+      .row-a .nc {
+        background: var(--a-light);
+      }
+      .row-a .dc {
+        background: #fef8fb;
+      }
+      .row-a .node {
+        background: #a86080;
+        border-color: var(--a-bg);
+        color: #1e0010;
+      }
+
+      /* Financiera — forest green */
+      .row-f .lc {
+        background: var(--f-bg);
+      }
+      .row-f .nc {
+        background: var(--f-light);
+      }
+      .row-f .dc {
+        background: #f5fcf8;
+      }
+      .row-f .node {
+        background: #40986a;
+        border-color: var(--f-bg);
+        color: #030e08;
+      }
+
+      /* ─── FOOTER ─── */
+      .footer {
+        text-align: center;
+        padding: 12px;
+        margin-top: 4px;
+        font-size: 9.5px;
+        color: #666;
+        border-top: 3px solid var(--red);
+        background: #fff;
+        letter-spacing: 0.4px;
+      }
+      .footer a {
+        color: var(--red);
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ══════════ HEADER ══════════ -->
+    <div class="hdr">
+      <div class="hdr-cross">✚</div>
+      <div class="hdr-main">
+        <h1>
+          Cuadro de Mando Integral — BSC · Dirección de Gobierno y Servicios TI
+        </h1>
+        <p>
+          Cruz Roja Colombiana · Seccional Valle del Cauca · Plan Estratégico TI
+          2026 – 2030
+        </p>
+      </div>
+      <div class="hdr-nit">
+        NIT 890.306.215-0 · CIIU 8699<br />
+        Fundada 1925 · IPS Código 7600103322<br />
+        10 Direcciones · 20 municipios Valle
+      </div>
+      <div class="hdr-kpis">
+        <div class="hdr-kpi">
+          <div class="v">≥99.8%</div>
+          <div class="l">Disponibilidad</div>
+        </div>
+        <div class="hdr-kpi">
+          <div class="v">4.2/5</div>
+          <div class="l">Madurez Digital</div>
+        </div>
+        <div class="hdr-kpi">
+          <div class="v">90%</div>
+          <div class="l">Trámites Digitales</div>
+        </div>
+        <div class="hdr-kpi">
+          <div class="v">≤10%</div>
+          <div class="l">Desviación TI</div>
+        </div>
+        <div class="hdr-kpi">
+          <div class="v">300</div>
+          <div class="l">Licencias M365</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ LEGEND ══════════ -->
+    <div class="legend">
+      <div class="legend-item">
+        <div class="leg-line leg-solid"></div>
+        Conexión establecida (relación causal confirmada)
+      </div>
+      <div class="legend-item">
+        <div class="leg-line leg-dash"></div>
+        Conexión en desarrollo (iniciativa en curso / parcial)
+      </div>
+      <div
+        class="legend-item"
+        style="
+          margin-left: auto;
+          color: rgba(255, 255, 255, 0.5);
+          font-size: 9.5px;
+        "
+      >
+        ★ Recurso gratuito disponible (MAKAIA/TechSoup) &nbsp;|&nbsp; ⚠ Riesgo
+        crítico identificado (IFX/ICRC incidents)
+      </div>
+    </div>
+
+    <!-- ══════════ BODY ══════════ -->
+    <div class="outer">
+      <div class="layout">
+        <div class="bsc-wrap">
+          <svg id="svg-a"></svg>
+
+          <table>
+            <colgroup>
+              <col />
+              <col />
+              <col />
+              <col />
+              <col />
+            </colgroup>
+
+            <!-- ── COLUMN HEADERS ── -->
+            <tr class="ch">
+              <th class="ch-e"></th>
+              <th class="ch-g">Objetivos Estratégicos — Mapa Causal</th>
+              <th class="ch-g">Medidas · Lead (Actuación) → Lag (Resultado)</th>
+              <th class="ch-g">Metas 2030</th>
+              <th class="ch-g">Iniciativas Estratégicas</th>
+            </tr>
+
+            <!-- ════════════════════════════════════════════
+           FILA 1 · MISIÓN / VISIÓN
+      ════════════════════════════════════════════ -->
+            <tr class="row-mv">
+              <td class="lc"><div class="rl">Misión · Visión</div></td>
+              <td class="nc">
+                <div class="nh">
+                  <div
+                    class="node"
+                    id="MV1"
+                    data-tip="Misión: Prevenir y aliviar el sufrimiento humano"
+                  >
+                    Prevenir y aliviar el sufrimiento humano
+                  </div>
+                  <div
+                    class="node"
+                    id="MV2"
+                    data-tip="Visión 2030: Referente regional de transformación digital humanitaria"
+                  >
+                    Referente digital humanitario Valle 2030
+                  </div>
+                  <div
+                    class="node"
+                    id="MV3"
+                    data-tip="100 años de presencia: 1925–2025. El centenario exige una TI a la altura de la misión"
+                  >
+                    100 años de misión humanitaria 1925–2025
+                  </div>
+                </div>
+              </td>
+              <td class="dc">
+                <span class="mt">Impacto humanitario TI</span>
+                <div class="mv">
+                  Trazabilidad digital vena-a-vena: 100% · Tiempo activación
+                  tecnológica en desastres: &lt;15 min
+                </div>
+                <span class="mt">Presencia digital</span>
+                <div class="mv">
+                  Cobertura programas educativos en línea: &gt;80% · Voluntarios
+                  contactables digitalmente &lt;1 h: &gt;80%
+                </div>
+              </td>
+              <td class="dc">
+                <div>
+                  <span class="pill">MV1</span>
+                  <p class="pt">
+                    Disponibilidad banco de sangre ≥ 99.9% · Benchmark: NABH
+                    India, ISBT
+                  </p>
+                </div>
+                <div>
+                  <span class="pill">MV2</span>
+                  <p class="pt">
+                    Posicionamiento IFRC Digital Maturity: nivel ≥ 2.5 al año 2
+                  </p>
+                </div>
+                <div>
+                  <span class="pill">MV3</span>
+                  <p class="pt">
+                    PETI 2026-2030 alineado con Plan Estratégico Nacional en
+                    construcción
+                  </p>
+                </div>
+              </td>
+              <td class="dc">
+                <div class="ii star">
+                  Activar MAKAIA/TechSoup: 300 licencias M365 + USD 3.500 Azure
+                  Credits GRATIS
+                </div>
+                <div class="ii">
+                  Alinear PETI con Jornadas Territoriales Plan Estratégico
+                  2026-2030
+                </div>
+                <div class="ii">
+                  Aplicar IFRC Digital Maturity Model como diagnóstico base (45+
+                  Soc. Nacionales)
+                </div>
+                <div class="ii">
+                  Portal centros humanitarios con servicios 24/7 accesibles
+                  desde 20 municipios
+                </div>
+                <div class="ii">
+                  Dashboard de impacto humanitario público (Balance Humanitario
+                  digital)
+                </div>
+              </td>
+            </tr>
+
+            <!-- ════════════════════════════════════════════
+           FILA 2 · OBJETIVO ESTRATÉGICO
+      ════════════════════════════════════════════ -->
+            <tr class="row-oe">
+              <td class="lc"><div class="rl">Objetivo Estratégico</div></td>
+              <td class="nc">
+                <div class="nh">
+                  <div
+                    class="node"
+                    id="OE1"
+                    data-tip="Resiliencia: blindar la operación ante ciberataques como el de IFX Networks (sep. 2023)"
+                  >
+                    Resiliencia Digital Humanitaria
+                  </div>
+                  <div
+                    class="node"
+                    id="OE2"
+                    data-tip="Transformación: Portal Educativo, Hemocentro 4.0, integración Unit4 ERP nacional"
+                  >
+                    Transformación de Servicios Institucionales
+                  </div>
+                  <div
+                    class="node"
+                    id="OE3"
+                    data-tip="Gobernanza: pasar de 1 cargo TI a una dirección estructurada con COBIT 2019"
+                  >
+                    Eficiencia Operativa y Gobernanza TI
+                  </div>
+                </div>
+              </td>
+              <td class="dc">
+                <span class="mt">OE1 · Resiliencia</span>
+                <div class="mv">
+                  % cumplimiento ISO 27001 → Incidentes gestionados / tiempo
+                  recuperación DRP
+                </div>
+                <span class="mt">OE2 · Transformación</span>
+                <div class="mv">
+                  % servicios digitalizados → Usuarios activos Portal + App
+                  Hemocentro 4.0
+                </div>
+                <span class="mt">OE3 · Gobernanza</span>
+                <div class="mv">
+                  % procesos TI bajo COBIT 2019 → Desviación presupuestal TI vs.
+                  plan
+                </div>
+              </td>
+              <td class="dc">
+                <div>
+                  <span class="pill">OE1</span>
+                  <p class="pt">
+                    ISO 27001: 90% · DRP probado semestral · CISO designado
+                  </p>
+                </div>
+                <div>
+                  <span class="pill">OE2</span>
+                  <p class="pt">
+                    90% trámites digitalizados · App donantes operativa 2028
+                  </p>
+                </div>
+                <div>
+                  <span class="pill">OE3</span>
+                  <p class="pt">
+                    Desviación ≤ 10% · Madurez COBIT: nivel gestionado
+                  </p>
+                </div>
+              </td>
+              <td class="dc">
+                <div class="ii warn">
+                  Plan DRP anti-ransomware: lección IFX Networks (762 empresas
+                  afectadas, sept. 2023)
+                </div>
+                <div class="ii warn">
+                  Protocolo 2FA obligatorio: ICRC breach 2022 — 515.000
+                  registros, 70 días sin detectar
+                </div>
+                <div class="ii">
+                  Replicar modelo Unit4 ERP Nacional: Cruz Roja Col. logró 60%
+                  reducción cargas operativas
+                </div>
+                <div class="ii">
+                  IT Steering Committee trimestral (modelo IFRC Digital
+                  Governing Body)
+                </div>
+                <div class="ii">
+                  COBIT 2019 focalizado en 8 procesos: EDM01, APO02, APO12,
+                  APO13, BAI06, DSS01-02, MEA01
+                </div>
+              </td>
+            </tr>
+
+            <!-- ════════════════════════════════════════════
+           FILA 3 · PERSPECTIVA DE CLIENTES
+      ════════════════════════════════════════════ -->
+            <tr class="row-c">
+              <td class="lc"><div class="rl">Perspectiva de Clientes</div></td>
+              <td class="nc">
+                <div class="nh">
+                  <div
+                    class="node"
+                    id="C1"
+                    data-tip="646 usuarios internos activos + donantes de sangre + estudiantes + pacientes del Laboratorio"
+                  >
+                    Confianza de Beneficiarios y Comunidad
+                  </div>
+                  <div
+                    class="node"
+                    id="C2"
+                    data-tip="Hemocentro genera 60% ingresos ($771M COP). La app móvil es clave para fidelizar donantes"
+                  >
+                    Fidelización de Donantes Recurrentes
+                  </div>
+                  <div
+                    class="node"
+                    id="C3"
+                    data-tip="Régimen Tributario Especial DIAN exige transparencia. SICOF activo para denuncias internas"
+                  >
+                    Transparencia y Rendición de Cuentas
+                  </div>
+                </div>
+              </td>
+              <td class="dc">
+                <span class="mt">C1 · Lead</span>
+                <div class="mv">
+                  % satisfacción usuarios con servicios TI (encuesta semestral)
+                  · % trámites digitalizados nivel 3→5
+                </div>
+                <span class="mt">C1 · Lag</span>
+                <div class="mv">
+                  # personas asistidas con soporte TI · Tiempo respuesta mesa de
+                  ayuda: &lt;4 h (ITIL benchmark)
+                </div>
+                <span class="mt">C2 · Lead → Lag</span>
+                <div class="mv">
+                  % donantes registrados digitalmente → % donantes activos
+                  recurrentes en el año
+                </div>
+                <span class="mt">C3 · Lead → Lag</span>
+                <div class="mv">
+                  % auditorías publicadas en línea → Ratio gasto adm. / gasto
+                  social (meta: 10%/90%)
+                </div>
+              </td>
+              <td class="dc">
+                <div>
+                  <span class="pill">C1</span>
+                  <p class="pt">
+                    Satisfacción ≥ 4.0/5.0 · Van Grembergen IT BSC benchmark
+                  </p>
+                </div>
+                <div>
+                  <span class="pill">C2</span>
+                  <p class="pt">
+                    &gt;90% donantes registrados digitalmente · App Hemocentro
+                    4.0 activa
+                  </p>
+                </div>
+                <div>
+                  <span class="pill">C3</span>
+                  <p class="pt">
+                    Ratio 10% admin / 90% impacto social sostenido (RTE DIAN)
+                  </p>
+                </div>
+              </td>
+              <td class="dc">
+                <div class="ii">
+                  Portal Educativo Transaccional: PSE + certificados digitales
+                  verificables (Ley 527/1999)
+                </div>
+                <div class="ii">
+                  App móvil Hemocentro 4.0: historial, campañas, notificaciones
+                  push para donantes
+                </div>
+                <div class="ii">
+                  Portal de autoservicio para 646 usuarios internos (M365
+                  SharePoint — licencia gratis MAKAIA)
+                </div>
+                <div class="ii">
+                  Dashboard público: Balance Humanitario digital anual
+                  (actualmente en Issuu)
+                </div>
+                <div class="ii star">
+                  Google Workspace for Nonprofits: Forms + Drive para
+                  inscripciones (ya en uso, ampliar)
+                </div>
+                <div class="ii">
+                  Soporte omnicanal: WhatsApp Business + portal + email
+                  (actualmente solo WhatsApp aislado)
+                </div>
+              </td>
+            </tr>
+
+            <!-- ════════════════════════════════════════════
+           FILA 4 · PERSPECTIVA PROCESOS INTERNOS
+      ════════════════════════════════════════════ -->
+            <tr class="row-p">
+              <td class="lc">
+                <div class="rl">Perspectiva Procesos Internos</div>
+              </td>
+              <td class="nc">
+                <div class="nh">
+                  <div
+                    class="node"
+                    id="P1"
+                    data-tip="ISO 27001 al 45%. Incidente IFX/RansomHouse sept. 2023 afectó Cruz Roja Colombia directamente"
+                  >
+                    Ciberseguridad Integral y Continuidad DRP
+                  </div>
+                  <div
+                    class="node"
+                    id="P2"
+                    data-tip="Siesa (ERP), HeVa (clínica), Q10 (educación) operan como islas. API Gateway es la solución"
+                  >
+                    Interoperabilidad Siesa · HeVa · Q10
+                  </div>
+                  <div
+                    class="node"
+                    id="P3"
+                    data-tip="Azure M365 ya activo (646 licencias). Migración servidores físicos +5 años de antigüedad"
+                  >
+                    Infraestructura Cloud First / Azure Híbrido
+                  </div>
+                  <div
+                    class="node"
+                    id="P4"
+                    data-tip="Sin mesa de ayuda centralizada. Un solo cargo TI soporta 10 direcciones operativas"
+                  >
+                    Gestión de Servicios TI con ITIL 4
+                  </div>
+                </div>
+              </td>
+              <td class="dc">
+                <span class="mt">P1 · Lead → Lag</span>
+                <div class="mv">
+                  % controles ISO 27001 / # simulacros DRP / parches críticos
+                  &lt;72 h → RTO &lt;4 h servicios críticos
+                </div>
+                <span class="mt">P2 · Lead → Lag</span>
+                <div class="mv">
+                  # APIs activas / % interfaces documentadas → % transacciones
+                  sin reproceso entre sistemas
+                </div>
+                <span class="mt">P3 · Lead → Lag</span>
+                <div class="mv">
+                  % servidores migrados a Azure → Disponibilidad misional ≥
+                  99.8% · Ahorro infraestructura
+                </div>
+                <span class="mt">P4 · Lead → Lag</span>
+                <div class="mv">
+                  % incidentes bajo ITIL / % SLA cumplido → Tiempo resolución /
+                  satisfacción usuario ≥4.0/5
+                </div>
+              </td>
+              <td class="dc">
+                <div>
+                  <span class="pill">P1</span>
+                  <p class="pt">
+                    ISO 27001: 90% · DRP semestral · 2FA obligatorio · EDR
+                    activo
+                  </p>
+                </div>
+                <div>
+                  <span class="pill">P2</span>
+                  <p class="pt">
+                    100% interoperabilidad · API Gateway operativo 2027
+                  </p>
+                </div>
+                <div>
+                  <span class="pill">P3</span>
+                  <p class="pt">
+                    Disponibilidad ≥ 99.8% · 100% servidores &gt;5 años migrados
+                  </p>
+                </div>
+                <div>
+                  <span class="pill">P4</span>
+                  <p class="pt">
+                    Ratio TI/empleados ≥ 1:50 · Mesa ayuda centralizada activa
+                  </p>
+                </div>
+              </td>
+              <td class="dc">
+                <div class="ii warn">
+                  SOC + SIEM/SOAR + MFA: lección directa ICRC breach
+                  (CVE-2021-40539, 70 días sin detectar)
+                </div>
+                <div class="ii warn">
+                  Eliminar dependencia hosting proveedor único: diversificar
+                  post-incidente IFX Networks
+                </div>
+                <div class="ii">
+                  API Gateway + microservicios: modelo de datos común para
+                  Siesa, HeVa 2.5, Q10
+                </div>
+                <div class="ii">
+                  Integración con Unit4 ERP Nacional (Cruz Roja Col. ya lo usa
+                  vía GCON4/DrivERP)
+                </div>
+                <div class="ii">
+                  Migración Azure híbrido: aprovechar créditos USD 3.500/año
+                  MAKAIA + licencias M365 gratuitas
+                </div>
+                <div class="ii">
+                  Contratar CISO (cargo inexistente) + escalar equipo TI de 1 a
+                  mínimo 3 personas
+                </div>
+                <div class="ii star">
+                  Implementar MAKAIA "Resaltar" (Cámara de Comercio Cali):
+                  diagnóstico digital gratuito
+                </div>
+              </td>
+            </tr>
+
+            <!-- ════════════════════════════════════════════
+           FILA 5 · PERSPECTIVA APRENDIZAJE Y CRECIMIENTO
+      ════════════════════════════════════════════ -->
+            <tr class="row-a">
+              <td class="lc">
+                <div class="rl">Perspectiva Aprendizaje y Crecimiento</div>
+              </td>
+              <td class="nc">
+                <div class="nh">
+                  <div
+                    class="node"
+                    id="A1"
+                    data-tip="70% del equipo TI tiene certificaciones básicas. Falta: ITIL 4, COBIT 2019, AZ-900, CEH"
+                  >
+                    Competencias Digitales y Certificaciones TI
+                  </div>
+                  <div
+                    class="node"
+                    id="A2"
+                    data-tip="Sin plataforma de analítica. 13 sistemas SaaS sin dato único. Objetivo: Data Lake institucional"
+                  >
+                    Gobierno de Datos e Inteligencia Institucional
+                  </div>
+                </div>
+              </td>
+              <td class="dc">
+                <span class="mt">A1 · Lead</span>
+                <div class="mv">
+                  % plan formación ejecutado · % personal TI con certificación
+                  vigente · Horas capacitación/empleado/año ≥40 h (benchmark
+                  ISACA)
+                </div>
+                <span class="mt">A1 · Lag</span>
+                <div class="mv">
+                  Índice madurez digital equipo TI (base actual: 2.8/5.0 · meta:
+                  4.2/5.0)
+                </div>
+                <span class="mt">A2 · Lead</span>
+                <div class="mv">
+                  % dominios de datos con responsable asignado y diccionario
+                  publicado (actualmente: 0%)
+                </div>
+                <span class="mt">A2 · Lag</span>
+                <div class="mv">
+                  % decisiones gerenciales soportadas por datos · # dashboards
+                  Power BI activos
+                </div>
+              </td>
+              <td class="dc">
+                <div>
+                  <span class="pill">A1</span>
+                  <p class="pt">
+                    Madurez &gt;4.2/5 al 2030 · ≥50% equipo certificado · ≥40
+                    h/año/persona
+                  </p>
+                </div>
+                <div>
+                  <span class="pill">A2</span>
+                  <p class="pt">
+                    100% procesos críticos con dato gobernado · Data Lake
+                    operativo 2029
+                  </p>
+                </div>
+              </td>
+              <td class="dc">
+                <div class="ii">
+                  Ruta de certificaciones por rol: ITIL 4 Foundation · COBIT
+                  2019 · AZ-900 · CompTIA Security+
+                </div>
+                <div class="ii">
+                  Evaluación semestral de competencias TI (gap analysis por
+                  cargo y área)
+                </div>
+                <div class="ii star">
+                  Power BI para Nonprofits: hasta 10 licencias gratuitas vía
+                  MAKAIA — dashboards gerenciales
+                </div>
+                <div class="ii">
+                  Comité de Gobierno de Datos: data owners por dirección + data
+                  stewards + políticas calidad
+                </div>
+                <div class="ii">
+                  Catálogo de datos institucional (Siesa + HeVa + Q10 +
+                  Hemocentro + Laboratorio)
+                </div>
+                <div class="ii">
+                  Plataforma Data Lake + análisis predictivo IA: donación sangre
+                  y programas humanitarios (2030)
+                </div>
+                <div class="ii">
+                  Aplicar IFRC Digital Maturity Model: 3 dominios (Personas,
+                  Procesos, Tecnología), 3 niveles
+                </div>
+              </td>
+            </tr>
+
+            <!-- ════════════════════════════════════════════
+           FILA 6 · PERSPECTIVA FINANCIERA (BASE)
+      ════════════════════════════════════════════ -->
+            <tr class="row-f">
+              <td class="lc"><div class="rl">Perspectiva Financiera</div></td>
+              <td class="nc">
+                <div class="nh">
+                  <div
+                    class="node"
+                    id="F1"
+                    data-tip="Convenio MAKAIA: ahorro 50-100% licenciamiento. Microsoft Nonprofit. Benchmark: Cruz Roja España ~1% ingresos en TI"
+                  >
+                    Optimizar CTP y Recursos MAKAIA / TechSoup
+                  </div>
+                  <div
+                    class="node"
+                    id="F2"
+                    data-tip="Patrimonio neto $20.593M COP. RTE DIAN exige reinversión del excedente en objeto social"
+                  >
+                    Eficiencia, Transparencia y Sostenibilidad Financiera
+                  </div>
+                </div>
+              </td>
+              <td class="dc">
+                <span class="mt">F1 · Lead</span>
+                <div class="mv">
+                  % licenciamiento optimizado MAKAIA/Nonprofit · % activos
+                  tecnológicos inventariados · Ahorro anual licencias donadas
+                  (meta: &gt;$50M COP)
+                </div>
+                <span class="mt">F1 · Lag</span>
+                <div class="mv">
+                  Desviación presupuestal TI ejecutado vs. planificado · Ratio
+                  inversión innovación/mantenimiento 30/70→40/60
+                </div>
+                <span class="mt">F2 · Lead</span>
+                <div class="mv">
+                  % auditorías financieras TI publicadas · Presupuesto TI como %
+                  ingresos totales (meta: 3-5%)
+                </div>
+                <span class="mt">F2 · Lag</span>
+                <div class="mv">
+                  Sostenibilidad servicios críticos (Hemocentro 60% ingresos) ·
+                  Reducción cargas operativas ≥40% (benchmark: CRC Nacional 60%
+                  con Unit4)
+                </div>
+              </td>
+              <td class="dc">
+                <div>
+                  <span class="pill">F1</span>
+                  <p class="pt">
+                    Desviación ≤ 10% · Ahorro MAKAIA &gt;$50M COP/año · Ratio
+                    40/60 innovación
+                  </p>
+                </div>
+                <div>
+                  <span class="pill">F2</span>
+                  <p class="pt">
+                    Presupuesto TI: 3-5% ingresos totales · Ratio 10% admin /
+                    90% impacto
+                  </p>
+                </div>
+              </td>
+              <td class="dc">
+                <div class="ii star">
+                  Activar MAKAIA/TechSoup: M365 (300 lic. gratis) + Azure
+                  ($3.500 USD/año) + Bitdefender + Zoom
+                </div>
+                <div class="ii star">
+                  Microsoft Nonprofit: herramientas seguridad (Defender, Intune,
+                  Azure AD Premium) SIN COSTO
+                </div>
+                <div class="ii">
+                  Racionalización licencias: inventario tecnológico completo
+                  (activos &gt;$321M COP valor histórico)
+                </div>
+                <div class="ii">
+                  Retiro planificado infraestructura obsoleta: servidores &gt;5
+                  años de antigüedad
+                </div>
+                <div class="ii">
+                  Transparencia financiera TI: reportes trimestrales al Comité
+                  de Gobierno de TI
+                </div>
+                <div class="ii warn">
+                  Diversificar proveedores: post-IFX Networks — evitar
+                  concentración de riesgo en proveedor único
+                </div>
+                <div class="ii">
+                  Negociar convenios sector solidario: MAKAIA "Resaltar" +
+                  Cámara de Comercio Cali
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <!-- bsc-wrap -->
+
+        <!-- RED UPWARD ARROW -->
+        <div class="arrow-col">
+          <div class="arrow-head"></div>
+          <div class="arrow-shaft"></div>
+          <div class="arrow-lbl">Cadena de valor humanitaria</div>
+        </div>
+      </div>
+      <!-- layout -->
+    </div>
+    <!-- outer -->
+
+    <!-- FOOTER -->
+    <div class="footer">
+      NIT 890.306.215-0 · Cruz Roja Colombiana Seccional Valle del Cauca · 2026
+      – 2030 · Confidencial – Uso Interno &nbsp;|&nbsp; Fuentes:
+      <a href="https://cruzrojavalle.org.co" target="_blank"
+        >cruzrojavalle.org.co</a
+      >
+      · <a href="https://makaia.org" target="_blank">makaia.org</a> ·
+      <a href="https://digital.ifrc.org/digital-maturity" target="_blank"
+        >IFRC Digital Maturity</a
+      >
+      ·
+      <a
+        href="https://www.icrc.org/en/publication/icrc-technology-strategy-summary"
+        target="_blank"
+        >ICRC Tech Strategy 2025</a
+      >
+      ·
+      <a
+        href="https://gcon4.com/es/la-cruz-roja-colombiana-implementa-unit4-business-world-erp-a-traves-de-gcon4/"
+        target="_blank"
+        >Unit4 ERP CRC Nacional</a
+      >
+    </div>
+
+    <script>
+      /* ══════════════════════════════════════════════════════════
+   CONNECTION MAP
+   Full  = solid arrow reaching the target node
+   Mid   = dashed arrow stopping ~55% of the way (en desarrollo)
+══════════════════════════════════════════════════════════ */
+      const LINKS = [
+        // ─ Financiera → Aprendizaje ─
+        { f: "F1", t: "A1", full: true, color: "#2a7848" },
+        { f: "F2", t: "A2", full: true, color: "#2a7848" },
+        { f: "F2", t: "A1", full: true, color: "#2a7848" }, // eficiencia apoya competencias (en proceso)
+
+        // ─ Aprendizaje → Procesos ─
+        { f: "A1", t: "P1", full: true, color: "#6a3050" },
+        { f: "A1", t: "P3", full: true, color: "#6a3050" },
+        { f: "A2", t: "P2", full: true, color: "#6a3050" },
+        { f: "A2", t: "P4", full: true, color: "#6a3050" }, // gobierno datos → ITIL (en desarrollo)
+
+        // ─ Procesos → Clientes ─
+        { f: "P1", t: "C1", full: true, color: "#1e5870" },
+        { f: "P3", t: "C2", full: true, color: "#1e5870" }, // cloud → fidelización (pendiente app)
+        { f: "P4", t: "C1", full: true, color: "#1e5870" }, // ITIL → confianza (en implementación)
+        { f: "P2", t: "C3", full: true, color: "#1e5870" },
+
+        // ─ Clientes → Obj. Estratégico ─
+        { f: "C1", t: "OE1", full: true, color: "#8a3018" },
+        { f: "C2", t: "OE2", full: true, color: "#8a3018" }, // fidelización → transformación (en proceso)
+        { f: "C3", t: "OE3", full: true, color: "#8a3018" },
+
+        // ─ Obj. Estratégico → Misión/Visión ─
+        { f: "OE1", t: "MV1", full: true, color: "#6a7800" },
+        { f: "OE2", t: "MV2", full: true, color: "#6a7800" },
+        { f: "OE3", t: "MV3", full: true, color: "#6a7800" }, // gobernanza → centenario (en construcción)
+      ];
+
+      /* ── Bezier point at parameter t ── */
+      function bezPt(x1, y1, midY, x2, y2, t) {
+        const m = 1 - t;
+        const bx =
+          m * m * m * x1 +
+          3 * m * m * t * x1 +
+          3 * m * t * t * x2 +
+          t * t * t * x2;
+        const by =
+          m * m * m * y1 +
+          3 * m * m * t * midY +
+          3 * m * t * t * midY +
+          t * t * t * y2;
+        return { x: bx, y: by };
+      }
+
+      /* ── Get node bounding box relative to SVG ── */
+      function box(id) {
+        const el = document.getElementById(id);
+        if (!el) return null;
+        const svg = document.getElementById("svg-a");
+        const svgR = svg.getBoundingClientRect();
+        const r = el.getBoundingClientRect();
+        return {
+          cx: r.left - svgR.left + r.width / 2,
+          top: r.top - svgR.top,
+          bot: r.top - svgR.top + r.height,
+          left: r.left - svgR.left,
+          right: r.left - svgR.left + r.width,
+        };
+      }
+
+      /* ── Draw all arrows ── */
+      function draw() {
+        const svg = document.getElementById("svg-a");
+        const wrap = document.querySelector(".bsc-wrap");
+        svg.setAttribute("width", wrap.offsetWidth);
+        svg.setAttribute("height", wrap.offsetHeight);
+        svg.innerHTML = "";
+
+        // Build arrowhead markers (full + mid variants per color)
+        const defs = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "defs",
+        );
+        const colors = [...new Set(LINKS.map((l) => l.color))];
+        colors.forEach((c) => {
+          ["full", "mid"].forEach((type) => {
+            const m = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "marker",
+            );
+            const id = `arr-${type}-${c.replace("#", "")}`;
+            m.setAttribute("id", id);
+            m.setAttribute("markerWidth", "7");
+            m.setAttribute("markerHeight", "5");
+            m.setAttribute("refX", "5.5");
+            m.setAttribute("refY", "2.5");
+            m.setAttribute("orient", "auto");
+            const poly = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "polygon",
+            );
+            poly.setAttribute("points", "0 0, 7 2.5, 0 5");
+            poly.setAttribute("fill", c);
+            poly.setAttribute("opacity", type === "mid" ? "0.55" : "0.75");
+            m.appendChild(poly);
+            defs.appendChild(m);
+          });
+        });
+        svg.appendChild(defs);
+
+        LINKS.forEach((link) => {
+          const f = box(link.f);
+          const t = box(link.t);
+          if (!f || !t) return;
+
+          // Source exits from top, target enters from bottom (upward flow)
+          const x1 = f.cx,
+            y1 = f.top - 2;
+          const x2 = t.cx,
+            y2 = t.bot + 2;
+          const midY = (y1 + y2) / 2;
+
+          if (link.full) {
+            // Full connection: solid line all the way to target
+            const path = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "path",
+            );
+            path.setAttribute(
+              "d",
+              `M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`,
+            );
+            path.setAttribute("fill", "none");
+            path.setAttribute("stroke", link.color);
+            path.setAttribute("stroke-width", "1.9");
+            path.setAttribute("stroke-opacity", "0.72");
+            path.setAttribute(
+              "marker-end",
+              `url(#arr-full-${link.color.replace("#", "")})`,
+            );
+            svg.appendChild(path);
+          } else {
+            // Mid-path connection: dashed line stopping at t≈0.52
+            const stopT = 0.52;
+            const ep = bezPt(x1, y1, midY, x2, y2, stopT);
+
+            // Draw from source to midpoint (dashed)
+            const path = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "path",
+            );
+            // Sub-bezier: de-Casteljau at stopT for cubic bezier
+            // We just draw a quadratic approximation to the first half
+            const cx = x1 + (x2 - x1) * stopT * 0.5;
+            const cy = y1 + (y2 - y1) * stopT * 0.6;
+            path.setAttribute(
+              "d",
+              `M ${x1} ${y1} Q ${cx} ${cy}, ${ep.x} ${ep.y}`,
+            );
+            path.setAttribute("fill", "none");
+            path.setAttribute("stroke", link.color);
+            path.setAttribute("stroke-width", "1.7");
+            path.setAttribute("stroke-opacity", "0.48");
+            path.setAttribute("stroke-dasharray", "5 4");
+            path.setAttribute(
+              "marker-end",
+              `url(#arr-mid-${link.color.replace("#", "")})`,
+            );
+            svg.appendChild(path);
+          }
+        });
+      }
+
+      window.addEventListener("load", () => setTimeout(draw, 320));
+      window.addEventListener("resize", () => setTimeout(draw, 80));
+    </script>
+  </body>
+</html>
