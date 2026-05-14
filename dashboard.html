@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Estratégico CIO · Cruz Roja Valle del Cauca · PETI 2026–2030</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --rojo: #C8102E;
+  --rojo-oscuro: #8B0A1E;
+  --rojo-claro: #E8394F;
+  --blanco: #FAFAFA;
+  --negro: #0D0D0D;
+  --gris1: #141414;
+  --gris2: #1E1E1E;
+  --gris3: #2A2A2A;
+  --gris4: #3A3A3A;
+  --texto-dim: #7A7A7A;
+  --verde: #10B981;
+  --verde-dim: #064E3B;
+  --amarillo: #F59E0B;
+  --amarillo-dim: #78350F;
+  --rojo-alerta: #EF4444;
+  --rojo-alerta-dim: #7F1D1D;
+  --azul: #60A5FA;
+  --naranja: #FB923C;
+
+  /* perspectivas BSC */
+  --fin: #F59E0B;
+  --ap: #10B981;
+  --proc: #60A5FA;
+  --cli: #C8102E;
+  --mision: #A855F7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--negro);
+  color: var(--blanco);
+  font-family: 'IBM Plex Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── HEADER ─── */
+.header {
+  background: var(--gris1);
+  border-bottom: 1px solid var(--gris4);
+  padding: 0;
+  position: sticky; top: 0; z-index: 100;
+}
+.header-inner {
+  max-width: 1440px; margin: 0 auto;
+  padding: 16px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-brand { display: flex; align-items: center; gap: 16px; }
+.cruz-badge {
+  width: 48px; height: 48px; background: var(--rojo);
+  border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.cruz-badge svg { width: 34px; height: 34px; fill: white; }
+.brand-text h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem; font-weight: 900;
+  color: var(--blanco); line-height: 1.1; letter-spacing: -0.3px;
+}
+.brand-text p {
+  font-size: 0.68rem; color: var(--texto-dim);
+  font-family: 'IBM Plex Mono', monospace; letter-spacing: 1px; margin-top: 2px;
+}
+.header-nav { display: flex; gap: 4px; }
+.nav-tab {
+  padding: 6px 14px; border-radius: 5px;
+  font-size: 0.72rem; font-weight: 500; cursor: pointer;
+  border: 1px solid transparent; transition: all 0.2s;
+  color: var(--texto-dim); background: transparent; letter-spacing: 0.5px;
+}
+.nav-tab.active, .nav-tab:hover {
+  background: var(--gris3); border-color: var(--gris4); color: var(--blanco);
+}
+.nav-tab.active { border-color: var(--rojo); color: var(--rojo); }
+.header-meta {
+  text-align: right; font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem; color: var(--texto-dim);
+}
+.meta-period { font-size: 0.95rem; font-weight: 600; color: var(--blanco); display: block; }
+.meta-type {
+  display: inline-block; margin-top: 3px; padding: 2px 8px;
+  background: var(--rojo); color: white; border-radius: 3px;
+  font-size: 0.6rem; letter-spacing: 2px;
+}
+
+/* ─── TABS CONTENT ─── */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ─── MAIN ─── */
+.main {
+  max-width: 1440px; margin: 0 auto;
+  padding: 32px 40px;
+}
+
+/* ─── SECTION ─── */
+.section-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px; margin-top: 40px;
+}
+.section-header:first-child { margin-top: 0; }
+.section-pill {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 3px; padding: 3px 10px;
+  border-radius: 20px; border: 1px solid; text-transform: uppercase;
+  white-space: nowrap;
+}
+.pill-fin { border-color: var(--fin); color: var(--fin); background: rgba(245,158,11,0.08); }
+.pill-ap { border-color: var(--ap); color: var(--ap); background: rgba(16,185,129,0.08); }
+.pill-proc { border-color: var(--proc); color: var(--proc); background: rgba(96,165,250,0.08); }
+.pill-cli { border-color: var(--cli); color: var(--cli); background: rgba(200,16,46,0.12); }
+.pill-mision { border-color: var(--mision); color: var(--mision); background: rgba(168,85,247,0.08); }
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; font-weight: 700; color: var(--blanco);
+}
+.section-line { flex: 1; height: 1px; background: var(--gris3); }
+.section-desc { font-size: 0.72rem; color: var(--texto-dim); white-space: nowrap; }
+
+/* ─── GRIDS ─── */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
+.grid-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 14px; }
+.grid-3-1 { display: grid; grid-template-columns: 3fr 1fr; gap: 14px; }
+
+/* ─── CARD BASE ─── */
+.card {
+  background: var(--gris2); border: 1px solid var(--gris4);
+  border-radius: 10px; padding: 20px; position: relative; overflow: hidden;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: var(--gris4); }
+.card-accent-fin { border-left: 3px solid var(--fin); }
+.card-accent-ap  { border-left: 3px solid var(--ap); }
+.card-accent-proc { border-left: 3px solid var(--proc); }
+.card-accent-cli { border-left: 3px solid var(--cli); }
+
+.card-label {
+  font-size: 0.62rem; letter-spacing: 2px; color: var(--texto-dim);
+  text-transform: uppercase; margin-bottom: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.card-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.6rem; font-weight: 900; line-height: 1; color: var(--blanco);
+}
+.card-unit { font-size: 1rem; color: var(--texto-dim); font-weight: 400; margin-left: 3px; }
+.card-meta { font-size: 0.7rem; color: var(--texto-dim); margin-top: 8px; }
+.card-source { font-size: 0.58rem; color: var(--gris4); margin-top: 8px; font-family: 'IBM Plex Mono', monospace; }
+
+/* ─── BADGE ESTADO ─── */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 9px; border-radius: 20px;
+  font-size: 0.62rem; font-weight: 600; letter-spacing: 0.5px;
+}
+.badge-verde { background: var(--verde-dim); color: var(--verde); }
+.badge-amarillo { background: var(--amarillo-dim); color: var(--amarillo); }
+.badge-rojo { background: var(--rojo-alerta-dim); color: var(--rojo-alerta); }
+.badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+/* ─── PROGRESS BAR ─── */
+.prog-wrap { margin-top: 12px; }
+.prog-header { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.68rem; color: var(--texto-dim); }
+.prog-bar-bg { height: 5px; background: var(--gris3); border-radius: 3px; overflow: hidden; }
+.prog-bar { height: 100%; border-radius: 3px; transition: width 1s ease; }
+
+/* ─── KPI CARD COMPLETA ─── */
+.kpi-card {
+  background: var(--gris2); border: 1px solid var(--gris4);
+  border-radius: 10px; padding: 18px;
+}
+.kpi-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.kpi-name { font-size: 0.7rem; color: var(--texto-dim); font-weight: 500; line-height: 1.3; }
+.kpi-values { display: flex; gap: 16px; align-items: flex-end; margin-top: 4px; }
+.kpi-real { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 900; line-height: 1; }
+.kpi-target { font-size: 0.68rem; color: var(--texto-dim); padding-bottom: 3px; }
+.kpi-prescripcion {
+  background: var(--gris3); border-radius: 6px; padding: 8px 10px;
+  margin-top: 10px; font-size: 0.65rem; color: var(--texto-dim);
+  border-left: 2px solid var(--azul); line-height: 1.4;
+}
+.kpi-prescripcion strong { color: var(--azul); }
+
+/* ─── MAPA ESTRATÉGICO BSC ─── */
+.bsc-map {
+  background: var(--gris2); border: 1px solid var(--gris4);
+  border-radius: 10px; padding: 28px; overflow: hidden;
+}
+.bsc-title {
+  font-family: 'Playfair Display', serif; font-size: 1rem;
+  font-weight: 700; text-align: center; color: var(--blanco);
+  margin-bottom: 6px;
+}
+.bsc-subtitle {
+  font-size: 0.67rem; color: var(--texto-dim); text-align: center;
+  margin-bottom: 28px; font-family: 'IBM Plex Mono', monospace;
+}
+
+.bsc-perspectiva {
+  display: grid; grid-template-columns: 110px 1fr;
+  gap: 0; margin-bottom: 16px; align-items: stretch;
+}
+.bsc-label {
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px 0 0 8px; padding: 12px 8px;
+  writing-mode: horizontal-tb; text-align: center;
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; line-height: 1.3;
+  min-height: 90px;
+}
+.bsc-label.fin { background: rgba(245,158,11,0.15); color: var(--fin); border: 1px solid rgba(245,158,11,0.3); }
+.bsc-label.ap  { background: rgba(16,185,129,0.12); color: var(--ap);  border: 1px solid rgba(16,185,129,0.25); }
+.bsc-label.proc { background: rgba(96,165,250,0.12); color: var(--proc); border: 1px solid rgba(96,165,250,0.25); }
+.bsc-label.cli { background: rgba(200,16,46,0.12); color: var(--rojo-claro); border: 1px solid rgba(200,16,46,0.3); }
+.bsc-label.mision { background: rgba(168,85,247,0.15); color: var(--mision); border: 1px solid rgba(168,85,247,0.3); }
+
+.bsc-cards-row {
+  display: grid; gap: 8px; padding: 8px;
+  background: var(--gris3); border-radius: 0 8px 8px 0;
+  border: 1px solid var(--gris4); border-left: none;
+}
+.bsc-node {
+  background: var(--gris2); border: 1px solid var(--gris4);
+  border-radius: 6px; padding: 10px 12px;
+}
+.bsc-node-title { font-size: 0.68rem; font-weight: 600; color: var(--blanco); line-height: 1.2; }
+.bsc-node-kpi { font-size: 0.6rem; color: var(--texto-dim); margin-top: 4px; font-family: 'IBM Plex Mono', monospace; }
+.bsc-node-val { font-size: 0.72rem; font-weight: 700; margin-top: 2px; }
+
+.bsc-arrow {
+  text-align: center; font-size: 1.2rem; color: var(--texto-dim);
+  margin: 4px 0; line-height: 1;
+}
+
+/* ─── RIESGO ─── */
+.risk-item {
+  background: var(--gris2); border: 1px solid var(--gris4);
+  border-radius: 8px; padding: 14px 16px;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.risk-badge {
+  flex-shrink: 0; width: 32px; height: 32px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem; font-weight: 800; letter-spacing: 0.5px;
+}
+.risk-alto { background: var(--rojo-alerta-dim); color: var(--rojo-alerta); }
+.risk-medio { background: var(--amarillo-dim); color: var(--amarillo); }
+.risk-body { flex: 1; }
+.risk-title { font-size: 0.72rem; font-weight: 600; color: var(--blanco); margin-bottom: 4px; }
+.risk-desc { font-size: 0.65rem; color: var(--texto-dim); line-height: 1.4; }
+.risk-accion {
+  font-size: 0.62rem; margin-top: 6px; padding: 5px 8px;
+  background: var(--gris3); border-radius: 4px;
+  border-left: 2px solid var(--naranja); color: var(--naranja);
+}
+
+/* ─── TIMELINE ─── */
+.timeline-item {
+  display: flex; gap: 16px; padding: 14px 0;
+  border-bottom: 1px solid var(--gris3);
+}
+.timeline-item:last-child { border-bottom: none; }
+.timeline-dot {
+  flex-shrink: 0; width: 10px; height: 10px; border-radius: 50%;
+  margin-top: 4px; border: 2px solid;
+}
+.dot-done { background: var(--verde); border-color: var(--verde); }
+.dot-active { background: var(--amarillo); border-color: var(--amarillo); animation: pulse 2s infinite; }
+.dot-pend { background: transparent; border-color: var(--gris4); }
+
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.4); }
+  50% { box-shadow: 0 0 0 5px rgba(245,158,11,0); }
+}
+
+.tl-content { flex: 1; }
+.tl-title { font-size: 0.72rem; font-weight: 600; color: var(--blanco); }
+.tl-date { font-size: 0.62rem; color: var(--texto-dim); font-family: 'IBM Plex Mono', monospace; margin-top: 2px; }
+.tl-desc { font-size: 0.65rem; color: var(--texto-dim); margin-top: 4px; line-height: 1.4; }
+.tl-budget {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+  color: var(--fin); font-weight: 600; white-space: nowrap; padding-top: 2px;
+}
+
+/* ─── PRESCRIPCION GLOBAL ─── */
+.prescripcion-box {
+  background: linear-gradient(135deg, rgba(96,165,250,0.08) 0%, rgba(168,85,247,0.05) 100%);
+  border: 1px solid rgba(96,165,250,0.2);
+  border-radius: 10px; padding: 20px;
+}
+.prescripcion-box h3 {
+  font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--azul); font-family: 'IBM Plex Mono', monospace; margin-bottom: 14px;
+}
+.prescrip-item {
+  display: flex; gap: 12px; padding: 10px 0;
+  border-bottom: 1px solid rgba(96,165,250,0.1);
+}
+.prescrip-item:last-child { border-bottom: none; padding-bottom: 0; }
+.prescrip-num {
+  flex-shrink: 0; font-family: 'Playfair Display', serif;
+  font-size: 1.5rem; font-weight: 900; line-height: 1;
+  color: rgba(96,165,250,0.3);
+}
+.prescrip-text { flex: 1; }
+.prescrip-accion { font-size: 0.72rem; font-weight: 600; color: var(--blanco); margin-bottom: 3px; }
+.prescrip-razon { font-size: 0.65rem; color: var(--texto-dim); line-height: 1.4; }
+.prescrip-prioridad {
+  flex-shrink: 0; font-size: 0.58rem; padding: 2px 7px;
+  border-radius: 3px; height: fit-content; font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.prio-1 { background: var(--rojo-alerta-dim); color: var(--rojo-alerta); }
+.prio-2 { background: var(--amarillo-dim); color: var(--amarillo); }
+.prio-3 { background: var(--verde-dim); color: var(--verde); }
+
+/* ─── CHART WRAPPER ─── */
+.chart-wrap { position: relative; height: 200px; margin-top: 12px; }
+.chart-wrap-sm { position: relative; height: 150px; margin-top: 10px; }
+
+/* ─── STATUS BAR ─── */
+.status-bar {
+  background: var(--gris1); border-bottom: 1px solid var(--gris3);
+  padding: 10px 40px;
+}
+.status-inner {
+  max-width: 1440px; margin: 0 auto;
+  display: flex; gap: 28px; align-items: center; flex-wrap: wrap;
+}
+.status-item { display: flex; align-items: center; gap: 7px; font-size: 0.67rem; color: var(--texto-dim); }
+.sdot { width: 7px; height: 7px; border-radius: 50%; }
+.sval { color: var(--blanco); font-weight: 600; font-family: 'IBM Plex Mono', monospace; }
+
+/* ─── RESPONSIVE ─── */
+@media(max-width: 1100px) {
+  .grid-4 { grid-template-columns: repeat(2,1fr); }
+  .grid-3 { grid-template-columns: repeat(2,1fr); }
+  .grid-2-1, .grid-1-2, .grid-3-1 { grid-template-columns: 1fr; }
+}
+@media(max-width: 768px) {
+  .main { padding: 20px 16px; }
+  .header-inner { padding: 12px 16px; flex-wrap: wrap; gap: 10px; }
+  .header-nav { display: none; }
+  .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="cruz-badge">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <rect x="35" y="5" width="30" height="90" rx="4"/>
+          <rect x="5" y="35" width="90" height="30" rx="4"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>Dashboard Estratégico CIO</h1>
+        <p>CRUZ ROJA COL. · SECCIONAL VALLE DEL CAUCA · PETI 2026–2030</p>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <button class="nav-tab active" onclick="showTab('bsc')">Mapa BSC</button>
+      <button class="nav-tab" onclick="showTab('financiero')">Financiero</button>
+      <button class="nav-tab" onclick="showTab('cliente')">Clientes</button>
+      <button class="nav-tab" onclick="showTab('procesos')">Procesos</button>
+      <button class="nav-tab" onclick="showTab('aprendizaje')">Aprendizaje</button>
+      <button class="nav-tab" onclick="showTab('prescripcion')">⚡ Prescripción</button>
+    </nav>
+    <div class="header-meta">
+      <span class="meta-period">ABR 2026</span>
+      <span class="meta-type">DASHBOARD PRESCRIPTIVO</span>
+    </div>
+  </div>
+</header>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+  <div class="status-inner">
+    <div class="status-item"><div class="sdot" style="background:var(--verde)"></div>Madurez Digital <span class="sval">2.8/5.0</span></div>
+    <div class="status-item"><div class="sdot" style="background:var(--rojo-alerta)"></div>Cumpl. ISO 27001 <span class="sval">45%</span></div>
+    <div class="status-item"><div class="sdot" style="background:var(--verde)"></div>Disponibilidad Hemocentro <span class="sval">99.1%</span></div>
+    <div class="status-item"><div class="sdot" style="background:var(--amarillo)"></div>Ejec. Presupuestal TI <span class="sval">67%</span></div>
+    <div class="status-item"><div class="sdot" style="background:var(--rojo-alerta)"></div>CISO Designado <span class="sval">NO</span></div>
+    <div class="status-item"><div class="sdot" style="background:var(--verde)"></div>Ingresos Hemocentro <span class="sval">$771M COP</span></div>
+    <div class="status-item" style="margin-left:auto"><span style="color:var(--texto-dim);font-size:0.62rem;font-family:'IBM Plex Mono',monospace">Actualizado: 04/01/2026</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TAB: MAPA BSC                                          -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-bsc">
+<div class="main">
+
+  <div class="section-header">
+    <span class="section-pill pill-mision">Mapa Estratégico BSC</span>
+    <span class="section-title">Cuadro de Mando Integral — Cruz Roja Valle del Cauca · PETI 2026–2030</span>
+    <div class="section-line"></div>
+    <span class="section-desc">Modelo ONG: Financiero → base habilitadora · Misión → fin último</span>
+  </div>
+
+<style>
+.bsc-wrap{padding:4px 0}
+.bsc-controls{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;align-items:center}
+.bsc-rbtn{display:flex;align-items:center;gap:5px;padding:5px 13px;border-radius:20px;border:1.5px solid;cursor:pointer;font-size:0.7rem;font-weight:500;background:transparent;transition:all .2s;color:var(--texto-suave);font-family:'IBM Plex Sans',sans-serif}
+.bsc-rbtn[data-r="all"]{border-color:var(--gris-borde)}
+.bsc-rbtn[data-r="all"].bon{background:var(--gris-claro);color:var(--blanco)}
+.bsc-rbtn[data-r="r1"]{border-color:#C8102E}
+.bsc-rbtn[data-r="r1"].bon{background:rgba(200,16,46,.12);color:#FF6B6B}
+.bsc-rbtn[data-r="r2"]{border-color:#3B82F6}
+.bsc-rbtn[data-r="r2"].bon{background:rgba(59,130,246,.12);color:#60A5FA}
+.bsc-rbtn[data-r="r3"]{border-color:#D97706}
+.bsc-rbtn[data-r="r3"].bon{background:rgba(217,119,6,.12);color:#FBBF24}
+.bsc-rdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.bsc-legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px;align-items:center}
+.bsc-leg-item{display:flex;align-items:center;gap:5px;font-size:0.65rem;color:var(--texto-suave)}
+.bsc-leg-line{width:22px;height:2px;border-radius:1px}
+
+.bsc-canvas-wrap{position:relative}
+canvas#bsc-cvs{position:absolute;top:0;left:0;width:100%;pointer-events:none;z-index:1}
+
+.bsc-mision{border:1.5px solid rgba(168,85,247,.5);background:rgba(168,85,247,.08);border-radius:8px;padding:10px 18px;text-align:center;margin-bottom:8px}
+.bsc-mision .bml{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:#A78BFA;font-weight:500;margin-bottom:4px;font-family:'IBM Plex Mono',monospace}
+.bsc-mision .bmt{font-size:0.72rem;color:var(--blanco);line-height:1.5}
+
+.bsc-persp-wrap{display:grid;grid-template-columns:82px 1fr;gap:0;margin-bottom:6px;position:relative;z-index:2}
+.bsc-persp-tab{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:6px 4px;border-radius:7px 0 0 7px;border:1px solid;border-right:none;min-height:82px}
+.bsc-pt-n{font-size:0.6rem;font-weight:500;letter-spacing:.4px;text-transform:uppercase;line-height:1.3}
+.bsc-pt-s{font-size:0.55rem;opacity:.65;margin-top:2px;line-height:1.2}
+.bsc-pt-cli{background:rgba(200,16,46,.1);border-color:rgba(200,16,46,.4);color:#FF6B6B}
+.bsc-pt-proc{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.35);color:#60A5FA}
+.bsc-pt-ap{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.35);color:#4ADE80}
+.bsc-pt-fin{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.35);color:#FCD34D}
+
+.bsc-nodes-row{display:flex;gap:6px;background:var(--gris-claro);border:1px solid var(--gris-borde);border-radius:0 7px 7px 0;padding:7px}
+.bsc-nc{flex:1;min-width:0;border:1.5px solid var(--gris-borde);border-radius:6px;padding:7px 9px;background:var(--gris-medio);cursor:pointer;transition:opacity .25s,box-shadow .2s,border-color .2s;position:relative;overflow:hidden}
+.bsc-nc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.bsc-nc.r1::before{background:#C8102E}
+.bsc-nc.r2::before{background:#3B82F6}
+.bsc-nc.r3::before{background:#D97706}
+.bsc-nc.r1r2::before{background:linear-gradient(to bottom,#C8102E 50%,#3B82F6 50%)}
+.bsc-nc.r2r3::before{background:linear-gradient(to bottom,#3B82F6 50%,#D97706 50%)}
+.bsc-nc.r1r3::before{background:linear-gradient(to bottom,#C8102E 50%,#D97706 50%)}
+.bsc-nc.r1r2r3::before{background:linear-gradient(to bottom,#C8102E 33%,#3B82F6 33%,#3B82F6 66%,#D97706 66%)}
+.bsc-nc.bdim{opacity:.13}
+.bsc-nc.bhl.r1{box-shadow:0 0 0 2px #C8102E;border-color:#C8102E}
+.bsc-nc.bhl.r2{box-shadow:0 0 0 2px #3B82F6;border-color:#3B82F6}
+.bsc-nc.bhl.r3{box-shadow:0 0 0 2px #D97706;border-color:#D97706}
+.bsc-nc.bhl.r1r2,.bsc-nc.bhl.r1r2r3,.bsc-nc.bhl.r1r3{box-shadow:0 0 0 2px #C8102E;border-color:#C8102E}
+.bsc-nc.bhl.r2r3{box-shadow:0 0 0 2px #3B82F6;border-color:#3B82F6}
+
+.bsc-nc-title{font-size:0.65rem;font-weight:500;color:var(--blanco);line-height:1.3;margin-bottom:4px}
+.bsc-nc-kpi{font-size:0.58rem;color:var(--texto-suave);line-height:1.3;margin-bottom:3px}
+.bsc-nc-tags{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px}
+.bsc-nc-tag{font-size:0.58rem;padding:1px 5px;border-radius:3px;white-space:nowrap;font-weight:500;font-family:'IBM Plex Mono',monospace}
+.bsc-tag-ok{background:rgba(34,197,94,.15);color:#4ADE80}
+.bsc-tag-warn{background:rgba(245,158,11,.15);color:#FCD34D}
+.bsc-tag-bad{background:rgba(239,68,68,.15);color:#FCA5A5}
+.bsc-nc-rdots{display:flex;gap:2px;position:absolute;top:5px;right:6px}
+.bsc-rdt{width:5px;height:5px;border-radius:50%}
+
+.bsc-detail{margin-top:12px;border:1px solid var(--gris-borde);border-radius:8px;padding:14px;background:var(--gris-medio);display:none}
+.bsc-detail.bshow{display:block}
+.bsc-det-title{font-size:0.75rem;font-weight:500;color:var(--blanco);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.bsc-det-close{font-size:0.62rem;color:var(--texto-suave);cursor:pointer;border:1px solid var(--gris-borde);border-radius:4px;padding:2px 8px}
+.bsc-det-close:hover{color:var(--blanco)}
+.bsc-det-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bsc-det-item label{font-size:0.58rem;color:var(--texto-suave);display:block;margin-bottom:2px;text-transform:uppercase;letter-spacing:.5px;font-family:'IBM Plex Mono',monospace}
+.bsc-det-item p{font-size:0.65rem;color:var(--blanco);line-height:1.5}
+
+.bsc-nota{font-size:0.62rem;color:var(--texto-suave);margin-top:10px;padding:8px 12px;background:var(--gris-claro);border-radius:6px;border-left:3px solid #C8102E;line-height:1.6}
+</style>
+
+<div class="bsc-wrap">
+
+<div class="bsc-controls">
+  <span style="font-size:0.68rem;font-weight:500;color:var(--texto-suave)">Filtrar ruta:</span>
+  <button class="bsc-rbtn bon" data-r="all" onclick="bscSetRoute('all',this)"><span class="bsc-rdot" style="background:var(--texto-suave)"></span>Todas las rutas</button>
+  <button class="bsc-rbtn" data-r="r1" onclick="bscSetRoute('r1',this)"><span class="bsc-rdot" style="background:#C8102E"></span>Ruta 1 — Hemocentro</button>
+  <button class="bsc-rbtn" data-r="r2" onclick="bscSetRoute('r2',this)"><span class="bsc-rdot" style="background:#3B82F6"></span>Ruta 2 — Ciberseguridad</button>
+  <button class="bsc-rbtn" data-r="r3" onclick="bscSetRoute('r3',this)"><span class="bsc-rdot" style="background:#D97706"></span>Ruta 3 — Educacion</button>
+</div>
+
+<div class="bsc-legend">
+  <div class="bsc-leg-item"><div class="bsc-leg-line" style="background:#C8102E"></div>Ruta 1 Hemocentro</div>
+  <div class="bsc-leg-item"><div class="bsc-leg-line" style="background:#3B82F6;background:repeating-linear-gradient(90deg,#3B82F6 0,#3B82F6 5px,transparent 5px,transparent 8px)"></div>Ruta 2 Ciberseguridad</div>
+  <div class="bsc-leg-item"><div class="bsc-leg-line" style="background:repeating-linear-gradient(90deg,#D97706 0,#D97706 2px,transparent 2px,transparent 5px)"></div>Ruta 3 Educacion</div>
+  <span style="font-size:0.6rem;color:var(--texto-suave);margin-left:auto;font-style:italic">Clic en cada objetivo para ver detalle completo</span>
+</div>
+
+<div class="bsc-mision">
+  <div class="bml">Declaracion de mision — impacto humanitario</div>
+  <div class="bmt">Ampliar el impacto humanitario en el Valle del Cauca mediante servicios de salud, educacion y accion humanitaria respaldados por una TI segura, integrada y eficiente.</div>
+</div>
+
+<div class="bsc-canvas-wrap" id="bsc-mapwrap">
+<canvas id="bsc-cvs"></canvas>
+
+<!-- CLIENTES -->
+<div class="bsc-persp-wrap">
+  <div class="bsc-persp-tab bsc-pt-cli"><div class="bsc-pt-n">Clientes y beneficiarios</div><div class="bsc-pt-s">El para quien</div></div>
+  <div class="bsc-nodes-row">
+    <div class="bsc-nc r1" data-r="r1" data-id="hemo" onclick="bscShowDetail('hemo')">
+      <div class="bsc-nc-rdots"><span class="bsc-rdt" style="background:#C8102E"></span></div>
+      <div class="bsc-nc-title">Elevar experiencia del donante y disponibilidad Hemocentro 24/7</div>
+      <div class="bsc-nc-kpi">KPI 1: % disponibilidad servicios Hemocentro<br>KPI 2: % donantes con app movil activa</div>
+      <div class="bsc-nc-tags"><span class="bsc-nc-tag bsc-tag-ok">99.1% disp.</span><span class="bsc-nc-tag bsc-tag-bad">App 0%</span></div>
+    </div>
+    <div class="bsc-nc r2" data-r="r2" data-id="conf" onclick="bscShowDetail('conf')">
+      <div class="bsc-nc-rdots"><span class="bsc-rdt" style="background:#3B82F6"></span></div>
+      <div class="bsc-nc-title">Fortalecer confianza de hospitales y EPS aliados</div>
+      <div class="bsc-nc-kpi">KPI 1: % percepcion de confiabilidad TI<br>KPI 2: Hospitales con HL7/FHIR activo</div>
+      <div class="bsc-nc-tags"><span class="bsc-nc-tag bsc-tag-warn">Confianza 70%</span><span class="bsc-nc-tag bsc-tag-bad">Meta 85%</span></div>
+    </div>
+    <div class="bsc-nc r3" data-r="r3" data-id="edu-cli" onclick="bscShowDetail('edu-cli')">
+      <div class="bsc-nc-rdots"><span class="bsc-rdt" style="background:#D97706"></span></div>
+      <div class="bsc-nc-title">Retener y escalar mercado educativo con oferta digital</div>
+      <div class="bsc-nc-kpi">KPI 1: % tramites educativos completamente digitales<br>KPI 2: Estudiantes activos en portal PSE</div>
+      <div class="bsc-nc-tags"><span class="bsc-nc-tag bsc-tag-bad">Portal 0%</span><span class="bsc-nc-tag bsc-tag-bad">Tramites 30%</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROCESOS -->
+<div class="bsc-persp-wrap">
+  <div class="bsc-persp-tab bsc-pt-proc"><div class="bsc-pt-n">Procesos internos</div><div class="bsc-pt-s">Excelencia operativa</div></div>
+  <div class="bsc-nodes-row">
+    <div class="bsc-nc r1" data-r="r1" data-id="cloud" onclick="bscShowDetail('cloud')">
+      <div class="bsc-nc-rdots"><span class="bsc-rdt" style="background:#C8102E"></span></div>
+      <div class="bsc-nc-title">Migrar infraestructura critica a Cloud Azure hibrido</div>
+      <div class="bsc-nc-kpi">KPI 1: % servidores migrados a Azure<br>KPI 2: % cumplimiento RTO/RPO servicios criticos</div>
+      <div class="bsc-nc-tags"><span class="bsc-nc-tag bsc-tag-bad">Migracion 0%</span><span class="bsc-nc-tag bsc-tag-bad">RTO/RPO 40%</span></div>
+    </div>
+    <div class="bsc-nc r2" data-r="r2" data-id="iso" onclick="bscShowDetail('iso')">
+      <div class="bsc-nc-rdots"><span class="bsc-rdt" style="background:#3B82F6"></span></div>
+      <div class="bsc-nc-title">Implementar ciberseguridad integral (SOC, DRP, ISO 27001)</div>
+      <div class="bsc-nc-kpi">KPI 1: % cumplimiento controles ISO 27001<br>KPI 2: Tiempo resolucion incidentes criticos</div>
+      <div class="bsc-nc-tags"><span class="bsc-nc-tag bsc-tag-bad">ISO 45%</span><span class="bsc-nc-tag bsc-tag-bad">Sin DRP</span></div>
+    </div>
+    <div class="bsc-nc r1r2" data-r="r1 r2" data-id="api" onclick="bscShowDetail('api')">
+      <div class="bsc-nc-rdots"><span class="bsc-rdt" style="background:#C8102E"></span><span class="bsc-rdt" style="background:#3B82F6"></span></div>
+      <div class="bsc-nc-title">API Gateway: eliminar islas Siesa / HeVa / Q-Symphony</div>
+      <div class="bsc-nc-kpi">KPI 1: % integracion sistemas institucionales<br>KPI 2: Reduccion procesos manuales (Shadow IT)</div>
+      <div class="bsc-nc-tags"><span class="bsc-nc-tag bsc-tag-bad">Integracion 0%</span><span class="bsc-nc-tag bsc-tag-warn">Meta Q4 2027</span></div>
+    </div>
+    <div class="bsc-nc r3" data-r="r3" data-id="portal-p" onclick="bscShowDetail('portal-p')">
+      <div class="bsc-nc-rdots"><span class="bsc-rdt" style="background:#D97706"></span></div>
+      <div class="bsc-nc-title">Digitalizar procesos educativos y soporte al estudiante</div>
+      <div class="bsc-nc-kpi">KPI 1: % tramites educativos en linea<br>KPI 2: % cumplimiento SLA mesa de ayuda educativa</div>
+      <div class="bsc-nc-tags"><span class="bsc-nc-tag bsc-tag-bad">Tramites 30%</span><span class="bsc-nc-tag bsc-tag-warn">SLA 75%</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- APRENDIZAJE -->
+<div class="bsc-persp-wrap">
+  <div class="bsc-persp-tab bsc-pt-ap"><div class="bsc-pt-n">Aprendizaje y crecimiento</div><div class="bsc-pt-s">Talento e innovacion</div></div>
+  <div class="bsc-nodes-row">
+    <div class="bsc-nc r1r2r3" data-r="r1 r2 r3" data-id="madurex" onclick="bscShowDetail('madurex')">
+      <div class="bsc-nc-rdots"><span class="bsc-rdt" style="background:#C8102E"></span><span class="bsc-rdt" style="background:#3B82F6"></span><span class="bsc-rdt" style="background:#D97706"></span></div>
+      <div class="bsc-nc-title">Elevar madurez digital del personal de 2.8 a 4.2/5.0</div>
+      <div class="bsc-nc-kpi">KPI 1: Indice de madurez digital institucional<br>KPI 2: Horas de formacion TI por colaborador/ano</div>
+      <div class="bsc-nc-tags"><span class="bsc-nc-tag bsc-tag-bad">Madurez 2.8/5.0</span><span class="bsc-nc-tag bsc-tag-warn">20 h anuales</span></div>
+    </div>
+    <div class="bsc-nc r2" data-r="r2" data-id="ciso" onclick="bscShowDetail('ciso')">
+      <div class="bsc-nc-rdots"><span class="bsc-rdt" style="background:#3B82F6"></span></div>
+      <div class="bsc-nc-title">Establecer gobierno TI formal (CISO, COBIT, ITIL 4)</div>
+      <div class="bsc-nc-kpi">KPI 1: % practicas COBIT/ITIL implementadas<br>KPI 2: CISO designado (Si/No)</div>
+      <div class="bsc-nc-tags"><span class="bsc-nc-tag bsc-tag-bad">Sin CISO</span><span class="bsc-nc-tag bsc-tag-bad">COBIT 40%</span></div>
+    </div>
+    <div class="bsc-nc r1r3" data-r="r1 r3" data-id="innov" onclick="bscShowDetail('innov')">
+      <div class="bsc-nc-rdots"><span class="bsc-rdt" style="background:#C8102E"></span><span class="bsc-rdt" style="background:#D97706"></span></div>
+      <div class="bsc-nc-title">Fomentar cultura de innovacion y pilotos tecnologicos</div>
+      <div class="bsc-nc-kpi">KPI 1: N. iniciativas de innovacion TI implementadas<br>KPI 2: N. pilotos tecnologicos ejecutados/ano</div>
+      <div class="bsc-nc-tags"><span class="bsc-nc-tag bsc-tag-bad">Iniciativas 1</span><span class="bsc-nc-tag bsc-tag-warn">Meta 5/ano</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- FINANCIERO -->
+<div class="bsc-persp-wrap">
+  <div class="bsc-persp-tab bsc-pt-fin"><div class="bsc-pt-n">Financiero</div><div class="bsc-pt-s">Base habilitadora ONG</div></div>
+  <div class="bsc-nodes-row">
+    <div class="bsc-nc r1" data-r="r1" data-id="fin-hemo" onclick="bscShowDetail('fin-hemo')">
+      <div class="bsc-nc-rdots"><span class="bsc-rdt" style="background:#C8102E"></span></div>
+      <div class="bsc-nc-title">Asegurar disponibilidad TI critica del Hemocentro</div>
+      <div class="bsc-nc-kpi">KPI 1: % disponibilidad servicios criticos Hemocentro<br>KPI 2: % mantenimiento preventivo ejecutado</div>
+      <div class="bsc-nc-tags"><span class="bsc-nc-tag bsc-tag-ok">Disp 99.1%</span><span class="bsc-nc-tag bsc-tag-warn">Prev 60%</span></div>
+    </div>
+    <div class="bsc-nc r1r2r3" data-r="r1 r2 r3" data-id="presup" onclick="bscShowDetail('presup')">
+      <div class="bsc-nc-rdots"><span class="bsc-rdt" style="background:#C8102E"></span><span class="bsc-rdt" style="background:#3B82F6"></span><span class="bsc-rdt" style="background:#D97706"></span></div>
+      <div class="bsc-nc-title">Optimizar ejecucion presupuestal TI (desviacion menor 10%)</div>
+      <div class="bsc-nc-kpi">KPI 1: % ejecucion presupuestal TI vs plan<br>KPI 2: % procesos TI optimizados/automatizados</div>
+      <div class="bsc-nc-tags"><span class="bsc-nc-tag bsc-tag-warn">Ejec 67%</span><span class="bsc-nc-tag bsc-tag-warn">Desv. meta 10%</span></div>
+    </div>
+    <div class="bsc-nc r2r3" data-r="r2 r3" data-id="costo" onclick="bscShowDetail('costo')">
+      <div class="bsc-nc-rdots"><span class="bsc-rdt" style="background:#3B82F6"></span><span class="bsc-rdt" style="background:#D97706"></span></div>
+      <div class="bsc-nc-title">Reducir costo operativo TI con Cloud y automatizacion</div>
+      <div class="bsc-nc-kpi">KPI 1: % reduccion costo operativo servicios criticos<br>KPI 2: Ahorro en licenciamiento convenio MAKAIA</div>
+      <div class="bsc-nc-tags"><span class="bsc-nc-tag bsc-tag-ok">MAKAIA 50-100%</span><span class="bsc-nc-tag bsc-tag-warn">Cloud: en progreso</span></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- fin bsc-canvas-wrap -->
+
+<div class="bsc-detail" id="bsc-det">
+  <div class="bsc-det-title"><span id="bsc-det-title"></span><span class="bsc-det-close" onclick="document.getElementById('bsc-det').classList.remove('bshow')">✕ cerrar</span></div>
+  <div class="bsc-det-grid" id="bsc-det-body"></div>
+</div>
+
+<div class="bsc-nota">
+  <strong style="color:#FF6B6B">Modelo ONG verificado:</strong> La perspectiva financiera es la base habilitadora (no el fin). Las flechas van de abajo hacia arriba. El Hemocentro aparece explicito en Clientes por ser el 60% de los ingresos ($771M COP). Ruta 1 completamente cerrada con 4 correcciones aplicadas. Filtra cada ruta para ver su cadena causal completa.
+</div>
+
+</div><!-- fin bsc-wrap -->
+
+<script>
+(function(){
+const BSC_R={
+  r1:{c:'#C8102E',d:[],w:1.8},
+  r2:{c:'#3B82F6',d:[6,3],w:1.8},
+  r3:{c:'#D97706',d:[2,4],w:1.8}
+};
+
+const BSC_CONN=[
+  {f:'fin-hemo',t:'madurex',r:['r1']},
+  {f:'fin-hemo',t:'innov',  r:['r1']},
+  {f:'fin-hemo',t:'cloud',  r:['r1']},
+  {f:'presup',  t:'madurex',r:['r1','r2','r3']},
+  {f:'presup',  t:'innov',  r:['r1']},
+  {f:'presup',  t:'cloud',  r:['r1']},
+  {f:'presup',  t:'api',    r:['r1']},
+  {f:'presup',  t:'iso',    r:['r2']},
+  {f:'presup',  t:'portal-p',r:['r3']},
+  {f:'costo',   t:'iso',    r:['r2']},
+  {f:'costo',   t:'innov',  r:['r3']},
+  {f:'costo',   t:'portal-p',r:['r3']},
+  {f:'madurex', t:'cloud',  r:['r1']},
+  {f:'madurex', t:'api',    r:['r1']},
+  {f:'madurex', t:'iso',    r:['r2']},
+  {f:'madurex', t:'portal-p',r:['r3']},
+  {f:'ciso',    t:'iso',    r:['r2']},
+  {f:'innov',   t:'cloud',  r:['r1']},
+  {f:'innov',   t:'api',    r:['r1']},
+  {f:'innov',   t:'portal-p',r:['r3']},
+  {f:'cloud',   t:'hemo',   r:['r1']},
+  {f:'api',     t:'hemo',   r:['r1']},
+  {f:'api',     t:'conf',   r:['r2']},
+  {f:'iso',     t:'conf',   r:['r2']},
+  {f:'portal-p',t:'edu-cli',r:['r3']},
+];
+
+let bscCur='all';
+
+function bscGC(id){
+  const el=document.querySelector('.bsc-nc[data-id="'+id+'"]');
+  if(!el)return null;
+  const wr=document.getElementById('bsc-mapwrap').getBoundingClientRect();
+  const er=el.getBoundingClientRect();
+  return{x:er.left-wr.left+er.width/2,top:er.top-wr.top,bot:er.top-wr.top+er.height};
+}
+
+function bscDraw(){
+  const wrap=document.getElementById('bsc-mapwrap');
+  const cvs=document.getElementById('bsc-cvs');
+  if(!wrap||!cvs)return;
+  const W=wrap.offsetWidth,H=wrap.offsetHeight;
+  cvs.width=W;cvs.height=H;cvs.style.height=H+'px';
+  const ctx=cvs.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+  const seen=new Set();
+  BSC_CONN.forEach(function(conn){
+    const numRoutes = conn.r.length;
+    conn.r.forEach(function(r, i){
+      // Filtramos para dibujar solo la ruta activa o todas
+      if(bscCur !== 'all' && r !== bscCur) return;
+      
+      const key=conn.f+'|'+conn.t+'|'+r;
+      if(seen.has(key))return;
+      seen.add(key);
+      const a=bscGC(conn.f),b=bscGC(conn.t);
+      if(!a||!b)return;
+      
+      const cfg=BSC_R[r];
+      // Si muestra una ruta específica se resalta, si muestra todas se suavizan pero se mantienen limpias
+      const isActive = (bscCur !== 'all');
+      const alpha = isActive ? 1.0 : 0.7;
+      const lw = isActive ? 2.4 : 1.6;
+      
+      // Separamos las líneas que van juntas para que no se superpongan ensuciando el gráfico
+      let offset = 0;
+      if(numRoutes === 2) offset = (i === 0) ? -5 : 5;
+      if(numRoutes === 3) offset = (i === 0) ? -8 : (i === 1 ? 0 : 8);
+      
+      ctx.save();
+      ctx.globalAlpha=alpha;
+      ctx.strokeStyle=cfg.c;
+      ctx.lineWidth=lw;
+      ctx.setLineDash(cfg.d || []);
+      ctx.lineCap='round';
+      ctx.lineJoin='round';
+      
+      const x1=a.x+offset, y1=a.top, x2=b.x+offset, y2=b.bot+3;
+      const my=(y1+y2)/2;
+      
+      ctx.beginPath();
+      ctx.moveTo(x1,y1);
+      ctx.bezierCurveTo(x1,my,x2,my,x2,y2);
+      ctx.stroke();
+      
+      ctx.setLineDash([]);
+      ctx.fillStyle=cfg.c;
+      ctx.beginPath();
+      ctx.moveTo(x2,y2);
+      ctx.lineTo(x2-4,y2-7);
+      ctx.lineTo(x2+4,y2-7);
+      ctx.closePath();
+      ctx.fill();
+      
+      ctx.restore();
+    });
+  });
+}
+
+window.bscSetRoute=function(r,btn){
+  bscCur=r;
+  document.querySelectorAll('.bsc-rbtn').forEach(function(b){b.classList.remove('bon');});
+  btn.classList.add('bon');
+  document.querySelectorAll('.bsc-nc').forEach(function(nc){
+    const nr=(nc.dataset.r||'').split(' ');
+    if(r==='all'){nc.classList.remove('bdim','bhl');}
+    else{
+      const match=nr.includes(r);
+      nc.classList.toggle('bdim',!match);
+      nc.classList.toggle('bhl',match);
+    }
+  });
+  bscDraw();
+};
+
+const BSC_DET={
+  hemo:{t:'Hemocentro y donantes — Ruta 1 · Destino',d:[
+    {l:'Objetivo estrategico',p:'Elevar la experiencia del donante y garantizar disponibilidad 24/7 del Hemocentro: $771M COP · 60% ingresos totales de la organizacion.'},
+    {l:'KPI 1 — Disponibilidad',p:'Real 99.1% · Meta 2030: 99.8%. Depende de migracion Cloud (B2, $80M) que elimina riesgo del servidor fisico obsoleto mayor a 5 anos.'},
+    {l:'KPI 2 — App movil donantes',p:'Real 0% lanzada · Meta Q4 2028. Proyecto Hemocentro 4.0 ($40M): agendamiento, historial y notificaciones de campanas de donacion.'},
+    {l:'Cadena causal completa R1',p:'Fin-Hemo + Presupuesto → Madurez Digital + Innovacion → Cloud Azure + API Gateway → Donantes satisfechos 24/7 → $771M sostenidos → Mision humanitaria cumplida.'},
+  ]},
+  conf:{t:'Confianza institucional — Ruta 2 · Destino',d:[
+    {l:'Objetivo estrategico',p:'Consolidar confianza de hospitales y EPS mediante servicios TI seguros, trazables e interoperables bajo estandar HL7/FHIR.'},
+    {l:'KPI 1 — Percepcion confiabilidad',p:'Real 70% · Meta 2028: 85%. Depende de certificar ISO 27001 al 70% en 2026 y 90% en 2027. Los hospitales exigen cumplimiento normativo.'},
+    {l:'KPI 2 — Hospitales con HL7/FHIR',p:'Real 0 hospitales integrados · Meta Q4 2027. API Gateway ($55M). Diferenciador frente a otros bancos de sangre del sector.'},
+    {l:'Cadena causal R2',p:'Presupuesto + Costo operativo → CISO + Madurez → SOC + ISO 27001 → HL7/FHIR → Confianza EPS/hospitales → Contratos B2B protegidos.'},
+  ]},
+  'edu-cli':{t:'Mercado educativo digital — Ruta 3 · Destino',d:[
+    {l:'Objetivo estrategico',p:'Retener el mercado educativo del Instituto ($61M COP) con oferta digital diferenciada frente a SENA y plataformas gratuitas (Coursera, YouTube).'},
+    {l:'KPI 1 — Tramites digitales',p:'Real 30% · Meta 2030: 90%. Portal educativo transaccional (B5, $35M) lleva tramites del nivel 3 al nivel 5 completamente digital.'},
+    {l:'KPI 2 — Estudiantes en portal PSE',p:'Real 0 (portal no lanzado) · Meta Q2 2028. Riesgo directo: sustitucion por SENA y plataformas gratuitas si no se actua.'},
+    {l:'Cadena causal R3',p:'Presupuesto + Costo operativo → Innovacion + Madurez → Portal educativo → Retencion mercado + nuevos ingresos B2B → Financia mision humanitaria.'},
+  ]},
+  cloud:{t:'Migracion Cloud Azure hibrido — Ruta 1 · Proceso',d:[
+    {l:'Objetivo estrategico',p:'Modernizar infraestructura fisica obsoleta (mas de 5 anos) migrando progresivamente a Azure Cloud First sin CAPEX masivo inicial.'},
+    {l:'KPI 1 — Servidores migrados',p:'Real 0% · Meta Q2 2027: 80%. Proyecto B2 ($80M). Prioridad: HeVa del Hemocentro primero para garantizar continuidad del servicio.'},
+    {l:'KPI 2 — RTO/RPO servicios criticos',p:'Real 40% · Meta 2027: 90%. Backups inmutables Azure con retencion 90 dias. Implementacion estimada: 4-6 semanas.'},
+    {l:'Entradas en R1 (4 fuentes)',p:'1) fin-hemo financia la migracion del servidor HeVa. 2) presupuesto TI financia Proyecto B2. 3) madurez digital: el personal ejecuta la migracion. 4) innovacion impulsa la adopcion de Cloud First.'},
+  ]},
+  iso:{t:'Ciberseguridad integral SOC + DRP + ISO 27001 — Ruta 2 · Proceso',d:[
+    {l:'Objetivo estrategico',p:'Implementar modelo integral de ciberseguridad humanitaria para proteger datos de pacientes, donantes y estudiantes contra ransomware y Ley 1581.'},
+    {l:'KPI 1 — Cumplimiento ISO 27001',p:'Real 45% · Meta Q2 2026: 70% · Meta 2027: 90%. Ransomware es amenaza critica (25% de importancia en FODA). Sin DRP probado.'},
+    {l:'KPI 2 — Incidentes en SLA',p:'Real no medido · Meta: criticos resueltos en menos de 4h. SOC con monitoreo 24/7. Presupuesto B1: $45M. Plazo obligatorio Q2 2026.'},
+    {l:'Entradas en R2',p:'Financiado por presupuesto TI y reduccion costo operativo. Gobernado por CISO (a nombrar Q2 2026). Ejecutado por personal con madurez digital certificada en ITIL 4.'},
+  ]},
+  api:{t:'API Gateway Siesa / HeVa / Q-Symphony — Rutas 1 y 2',d:[
+    {l:'Objetivo estrategico',p:'Eliminar islas de informacion con capa de integracion neutral HL7/FHIR sin dependencia de proveedores propietarios Siesa y HeVa.'},
+    {l:'KPI 1 — Integracion de sistemas',p:'Real 0% · Meta Q4 2027: 100%. Proyecto B3 ($55M). Habilitador del Data Lake, la analitica institucional y el Hemocentro 4.0.'},
+    {l:'KPI 2 — Reduccion Shadow IT',p:'Real alto sin medir · Meta: 0 procesos manuales paralelos en sistemas core para 2028. Elimina el riesgo de fragmentacion de datos.'},
+    {l:'Entradas corregidas R1 (4 fuentes)',p:'1) presupuesto TI financia B3. 2) madurez digital: el personal ejecuta la integracion tecnica. 3) innovacion: cultura que impulsa adopcion. 4) fin-hemo: trazabilidad del Hemocentro exige la integracion.'},
+  ]},
+  'portal-p':{t:'Digitalizacion procesos educativos — Ruta 3 · Proceso',d:[
+    {l:'Objetivo estrategico',p:'Digitalizar inscripcion, pago PSE, seguimiento academico y emision automatica de certificados del Instituto de Educacion de la Cruz Roja.'},
+    {l:'KPI 1 — Tramites en linea',p:'Real 30% · Meta 2028: 90%. Portal B5 ($35M) lleva tramites del nivel 3 al nivel 5 digital. Requiere hosting cloud (B2) y gobierno datos (B7).'},
+    {l:'KPI 2 — SLA mesa de ayuda educativa',p:'Real 75% · Meta 95%. El portal reduce carga de soporte al automatizar certificados y pagos, liberando al equipo TI para tareas estrategicas.'},
+    {l:'Entradas en R3 (4 fuentes)',p:'1) presupuesto TI financia B5. 2) costo operativo reducido libera recursos para portal. 3) innovacion impulsa pilotos de automatizacion. 4) madurez digital: personal que opera el portal.'},
+  ]},
+  madurex:{t:'Madurez digital del personal — Base de las 3 rutas · Aprendizaje',d:[
+    {l:'Objetivo estrategico',p:'Elevar indice de madurez digital institucional de 2.8 a 4.2/5.0 con microaprendizaje en Teams y apps institucionales sin salones presenciales.'},
+    {l:'KPI 1 — Indice madurez digital',p:'Real 2.8/5.0 · Meta 2030: 4.2/5.0. Es el KPI sintesis de la perspectiva de Aprendizaje. Sin cultura digital, ningun sistema nuevo se adopta (Shadow IT).'},
+    {l:'KPI 2 — Horas formacion TI/colaborador',p:'Real 20 h anuales · Meta 40 h anuales. Proyecto B8 ($15M): mejor relacion costo-impacto del PETI. Habilita los $315M restantes.'},
+    {l:'Por que cruza las 3 rutas',p:'Sin personal capacitado: R1 falla (nadie ejecuta migracion cloud ni API Gateway), R2 falla (nadie aplica controles ISO 27001), R3 falla (nadie opera portal educativo).'},
+  ]},
+  ciso:{t:'Gobierno TI formal CISO + COBIT + ITIL 4 — Ruta 2 · Aprendizaje',d:[
+    {l:'Objetivo estrategico',p:'Establecer gobierno formal con CISO designado, COBIT 2019 e ITIL 4 implementados y politicas de seguridad aprobadas por la Direccion Ejecutiva.'},
+    {l:'KPI 1 — Practicas COBIT/ITIL',p:'Real 40% · Meta 2027: 80%. Marcos adoptados formalmente en el PETI 2026-2030 pero con baja implementacion operativa actual.'},
+    {l:'KPI 2 — CISO designado',p:'Real no existe · Meta Q2 2026. Primer paso antes de cualquier proyecto de digitalizacion en Ruta 2. Sin CISO no hay gobernanza de seguridad.'},
+    {l:'Ruta causal R2',p:'Presupuesto → CISO designado → COBIT/ITIL implementados → Gobierno de datos + ISO 27001 → Confianza institucional → Contratos B2B con hospitales/EPS.'},
+  ]},
+  innov:{t:'Fomentar cultura de innovacion y pilotos — Rutas 1 y 3 · Aprendizaje',d:[
+    {l:'Objetivo estrategico',p:'Impulsar cultura de innovacion aplicada con pilotos medibles: IA predictiva de stock de sangre (R1) y automatizacion de certificados educativos (R3).'},
+    {l:'KPI 1 — Iniciativas de innovacion TI',p:'Real 1 Score · Meta 2028: 5 anuales. Usando Azure ya activo y datos acumulados (F6) sin requerir nueva infraestructura.'},
+    {l:'KPI 2 — Pilotos tecnologicos ejecutados',p:'Real 1 · Meta 3 anuales. R1: IA predictiva hemocomponentes (B4 Data Lake). R3: certificados blockchain verificables diferenciando frente a SENA.'},
+    {l:'Entradas financieras corregidas',p:'R1: fin-hemo financia IA de stock de sangre + presupuesto TI financia B4 Data Lake. R3: reduccion costo operativo libera recursos para pilotos educativos. Nodo completamente conectado en ambas rutas.'},
+  ]},
+  'fin-hemo':{t:'Disponibilidad TI critica Hemocentro — Ruta 1 · Base financiera',d:[
+    {l:'Objetivo estrategico',p:'Asegurar alta disponibilidad tecnologica del Hemocentro ($771M COP, 60% ingresos) como condicion de sostenibilidad de toda la organizacion Cruz Roja.'},
+    {l:'KPI 1 — Disponibilidad servicios criticos',p:'Real 99.1% · Meta 99.8%. Cada hora de caida implica perdida de ingresos criticos y riesgo directo sobre la vida de pacientes.'},
+    {l:'KPI 2 — Mantenimiento preventivo',p:'Real 60% · Meta 90%. Plan preventivo semestral reduce fallas no planificadas. El mantenimiento reactivo es mas costoso e impredecible.'},
+    {l:'Salidas en R1 (3 destinos)',p:'1) madurex: financia formacion del equipo TI. 2) innov: financia pilotos de IA de stock de sangre del Hemocentro. 3) cloud: financia migracion del servidor HeVa a Azure.'},
+  ]},
+  presup:{t:'Optimizar ejecucion presupuestal TI — Base de las 3 rutas · Financiero',d:[
+    {l:'Objetivo estrategico',p:'Asegurar ejecucion eficiente del presupuesto TI (desviacion menor 10%) y su contribucion a la sostenibilidad financiera institucional de la Cruz Roja.'},
+    {l:'KPI 1 — Ejecucion presupuestal',p:'Real 67% · Meta mayor 90% con desviacion menor 10%. PETI 2026-2030 requiere $330M en inversion total distribuida en 8 proyectos.'},
+    {l:'KPI 2 — Procesos TI automatizados',p:'Real bajo sin medir · Meta 60% al 2028. Automatizacion libera al equipo TI para trabajo estrategico de alto valor institucional.'},
+    {l:'Salidas en R1 (4 destinos en R1)',p:'1) madurex (formacion). 2) innov (pilotos tecnologicos). 3) cloud (Proyecto B2 migracion). 4) api (Proyecto B3 integracion). Todos los nodos de R1 en Aprendizaje y Procesos quedan financiados.'},
+  ]},
+  costo:{t:'Reducir costo operativo TI — Rutas 2 y 3 · Financiero',d:[
+    {l:'Objetivo estrategico',p:'Reducir costo operativo de TI mediante Cloud pay-as-you-go, automatizacion de procesos y aprovechamiento del convenio MAKAIA (50-100% en licencias).'},
+    {l:'KPI 1 — Reduccion costo operativo',p:'Real en proceso · Meta 2028: -20% vs 2024. Migracion Azure elimina costos fijos de mantenimiento de servidores fisicos obsoletos.'},
+    {l:'KPI 2 — Ahorro convenio MAKAIA',p:'Real 50-100% en licencias Microsoft. 646 licencias M365 a costo solidario. El programa Nonprofit aplica tambien para Azure y otros servicios cloud.'},
+    {l:'Salidas R2 y R3 (no R1)',p:'R2: financia ISO 27001 y SOC (ciberseguridad). R3: financia innovacion de pilotos educativos y portal transaccional PSE. El Hemocentro (R1) se financia por fin-hemo y presupuesto propios.'},
+  ]},
+};
+
+window.bscShowDetail=function(id){
+  const d=BSC_DET[id];if(!d)return;
+  document.getElementById('bsc-det-title').textContent=d.t;
+  document.getElementById('bsc-det-body').innerHTML=d.d.map(function(i){return'<div class="bsc-det-item"><label>'+i.l+'</label><p>'+i.p+'</p></div>';}).join('');
+  document.getElementById('bsc-det').classList.add('bshow');
+};
+
+var bscRaf;
+function bscSchedule(){cancelAnimationFrame(bscRaf);bscRaf=requestAnimationFrame(bscDraw);}
+window.addEventListener('resize',bscSchedule);
+setTimeout(bscDraw,200);
+})();
+</script>
+
+</div>
+</div>
+
+<!-- TAB: FINANCIERO                                        -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-financiero">
+<div class="main">
+
+  <div class="section-header">
+    <span class="section-pill pill-fin">Perspectiva 1</span>
+    <span class="section-title">Sostenibilidad Financiera — Base Habilitadora</span>
+    <div class="section-line"></div>
+    <span class="section-desc">Ingresos 2024: $1.240M COP · Activos TI: $321M COP</span>
+  </div>
+
+  <div class="grid-4">
+    <div class="card card-accent-fin">
+      <div class="card-label">Ingresos Totales 2024</div>
+      <div class="card-value">$1.240<span class="card-unit">M COP</span></div>
+      <div class="card-meta">Hemocentro 62% · Educación 5% · Lotería/Otros 33%</div>
+      <div class="prog-wrap">
+        <div class="prog-header"><span>Ejecución vs meta</span><span style="color:var(--fin)">100%</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar" style="width:100%;background:var(--fin)"></div></div>
+      </div>
+    </div>
+    <div class="card card-accent-fin">
+      <div class="card-label">Presupuesto TI Ejecutado</div>
+      <div class="card-value">67<span class="card-unit">%</span></div>
+      <div class="card-meta">Meta: desviación ≤ 10% · PETI 2026–2030</div>
+      <div class="prog-wrap">
+        <div class="prog-header"><span>Avance</span><span style="color:var(--amarillo)">67%</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar" style="width:67%;background:var(--amarillo)"></div></div>
+      </div>
+      <div style="margin-top:8px"><span class="badge badge-amarillo"><span class="badge-dot"></span>En seguimiento</span></div>
+    </div>
+    <div class="card card-accent-fin">
+      <div class="card-label">Ahorro MAKAIA (Licencias)</div>
+      <div class="card-value">50–100<span class="card-unit">%</span></div>
+      <div class="card-meta">646 licencias Microsoft 365 · Programa Nonprofit</div>
+      <div style="margin-top:10px"><span class="badge badge-verde"><span class="badge-dot"></span>Activo y renovado</span></div>
+    </div>
+    <div class="card card-accent-fin">
+      <div class="card-label">Activos Tecnológicos (Valor Hist.)</div>
+      <div class="card-value">$321<span class="card-unit">M COP</span></div>
+      <div class="card-meta">Servidores obsoletos >5 años · Riesgo operativo</div>
+      <div style="margin-top:10px"><span class="badge badge-rojo"><span class="badge-dot"></span>Infraestructura en riesgo</span></div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-pill pill-fin">Distribución</span>
+    <span class="section-title">Fuentes de Ingreso por Unidad</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid-2-1">
+    <div class="card card-accent-fin">
+      <div class="card-label">Ingresos por Unidad de Negocio</div>
+      <div class="chart-wrap"><canvas id="chartIngresos"></canvas></div>
+    </div>
+    <div class="card card-accent-fin">
+      <div class="card-label">Inversión PETI 2026–2030 por Proyecto</div>
+      <div style="margin-top:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--gris3)">
+          <span style="font-size:0.68rem;color:var(--blanco)">Infraestructura Cloud (B2)</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--fin)">$80M</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--gris3)">
+          <span style="font-size:0.68rem;color:var(--blanco)">API Gateway / Integración (B3)</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--fin)">$55M</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--gris3)">
+          <span style="font-size:0.68rem;color:var(--blanco)">Analítica Institucional (B4)</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--fin)">$60M</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--gris3)">
+          <span style="font-size:0.68rem;color:var(--blanco)">Ciberseguridad / SOC (B1)</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--rojo-alerta)">$45M</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--gris3)">
+          <span style="font-size:0.68rem;color:var(--blanco)">Hemocentro 4.0 + Portal (B5)</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--fin)">$75M</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0">
+          <span style="font-size:0.68rem;color:var(--blanco)">Capacitación Digital (B8)</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--fin)">$15M</span>
+        </div>
+        <div style="margin-top:8px;padding:8px;background:rgba(245,158,11,0.1);border-radius:5px;text-align:right">
+          <span style="font-size:0.65rem;color:var(--texto-dim)">TOTAL PETI </span>
+          <span style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--fin)">$330M</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TAB: CLIENTE                                           -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-cliente">
+<div class="main">
+
+  <div class="section-header">
+    <span class="section-pill pill-cli">Perspectiva 2</span>
+    <span class="section-title">Clientes y Beneficiarios — El Para Quién de la TI</span>
+    <div class="section-line"></div>
+  </div>
+
+  <!-- HEMOCENTRO DESTACADO -->
+  <div class="card" style="border:2px solid rgba(200,16,46,0.5);background:rgba(200,16,46,0.06);margin-bottom:14px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+      <span style="font-size:1.6rem">🩸</span>
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;color:var(--rojo-claro)">Hemocentro — Motor Crítico de la Organización</div>
+        <div style="font-size:0.67rem;color:var(--texto-dim);font-family:'IBM Plex Mono',monospace">MAYOR GENERADOR DE INGRESOS · 60% DE LOS INGRESOS TOTALES · SERVICIO 24/7</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:var(--rojo-claro)">$771M</div>
+        <div style="font-size:0.62rem;color:var(--texto-dim)">COP · Ingresos 2024</div>
+      </div>
+    </div>
+    <div class="grid-4">
+      <div class="kpi-card" style="border-color:rgba(200,16,46,0.3)">
+        <div class="kpi-header"><div class="kpi-name">Disponibilidad Servicios</div><span class="badge badge-verde"><span class="badge-dot"></span>OK</span></div>
+        <div class="kpi-values"><div class="kpi-real" style="color:var(--verde)">99.1<span style="font-size:1rem">%</span></div><div class="kpi-target">Meta 99.8%</div></div>
+        <div class="prog-wrap"><div class="prog-bar-bg"><div class="prog-bar" style="width:99.1%;background:var(--verde)"></div></div></div>
+        <div class="kpi-prescripcion"><strong>▶ Acción:</strong> Migrar HeVa a Azure para alcanzar el 99.8% y eliminar riesgo de servidor físico obsoleto.</div>
+      </div>
+      <div class="kpi-card" style="border-color:rgba(200,16,46,0.3)">
+        <div class="kpi-header"><div class="kpi-name">App Móvil Donantes</div><span class="badge badge-rojo"><span class="badge-dot"></span>Pendiente</span></div>
+        <div class="kpi-values"><div class="kpi-real" style="color:var(--rojo-alerta)">0<span style="font-size:1rem">%</span></div><div class="kpi-target">Meta: Lanzar Q4 2028</div></div>
+        <div class="prog-wrap"><div class="prog-bar-bg"><div class="prog-bar" style="width:5%;background:var(--rojo-alerta)"></div></div></div>
+        <div class="kpi-prescripcion"><strong>▶ Acción:</strong> Proyecto Hemocentro 4.0 debe iniciarse en Q2 2027 usando Azure (F2) + datos donantes (F6).</div>
+      </div>
+      <div class="kpi-card" style="border-color:rgba(200,16,46,0.3)">
+        <div class="kpi-header"><div class="kpi-name">Trazabilidad Hemocomponentes</div><span class="badge badge-amarillo"><span class="badge-dot"></span>Parcial</span></div>
+        <div class="kpi-values"><div class="kpi-real" style="color:var(--amarillo)">72<span style="font-size:1rem">%</span></div><div class="kpi-target">Meta 100%</div></div>
+        <div class="prog-wrap"><div class="prog-bar-bg"><div class="prog-bar" style="width:72%;background:var(--amarillo)"></div></div></div>
+        <div class="kpi-prescripcion"><strong>▶ Acción:</strong> API Gateway con estándar HL7/FHIR integra HeVa con hospitales aliados para trazabilidad total.</div>
+      </div>
+      <div class="kpi-card" style="border-color:rgba(200,16,46,0.3)">
+        <div class="kpi-header"><div class="kpi-name">% Trámites Digitalizados</div><span class="badge badge-rojo"><span class="badge-dot"></span>Bajo</span></div>
+        <div class="kpi-values"><div class="kpi-real" style="color:var(--rojo-alerta)">30<span style="font-size:1rem">%</span></div><div class="kpi-target">Meta 90% en 2030</div></div>
+        <div class="prog-wrap"><div class="prog-bar-bg"><div class="prog-bar" style="width:30%;background:var(--rojo-alerta)"></div></div></div>
+        <div class="kpi-prescripcion"><strong>▶ Acción:</strong> Portal transaccional PSE + agendamiento online reduce carga manual y mejora experiencia donante.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- EDUCACIÓN -->
+    <div class="card card-accent-cli">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <span style="font-size:1.1rem">👩‍🎓</span>
+        <div class="card-label" style="margin-bottom:0">Instituto de Educación y Estudiantes</div>
+        <span class="badge badge-amarillo" style="margin-left:auto"><span class="badge-dot"></span>Riesgo alto</span>
+      </div>
+      <div class="grid-2" style="gap:8px;margin-bottom:12px">
+        <div>
+          <div style="font-size:0.62rem;color:var(--texto-dim)">Ingresos 2024</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:var(--fin)">$61M <span style="font-size:0.9rem">COP</span></div>
+        </div>
+        <div>
+          <div style="font-size:0.62rem;color:var(--texto-dim)">Portal Educativo</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:var(--rojo-alerta)">0% <span style="font-size:0.9rem">avance</span></div>
+        </div>
+      </div>
+      <div class="kpi-prescripcion">
+        <strong>▶ Prescripción urgente:</strong> SENA y plataformas gratuitas (Coursera, YouTube) son sustitutos directos. El portal educativo con PSE es un Quick Win que debe lanzarse en Q2 2028 para retener estudiantes y abrir nuevos mercados B2B sin requerir infraestructura adicional.
+      </div>
+    </div>
+    <!-- PACIENTES Y HOSPITALES -->
+    <div class="card card-accent-proc">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <span style="font-size:1.1rem">🏥</span>
+        <div class="card-label" style="margin-bottom:0">Pacientes y Hospitales Aliados (B2B)</div>
+        <span class="badge" style="background:rgba(96,165,250,0.1);color:var(--proc);margin-left:auto"><span class="badge-dot" style="background:var(--proc)"></span>En desarrollo</span>
+      </div>
+      <div class="kpi-card" style="border-color:rgba(96,165,250,0.2)">
+        <div class="kpi-name">% Percepción de Confiabilidad TI</div>
+        <div class="kpi-values">
+          <div class="kpi-real" style="color:var(--proc)">70<span style="font-size:1rem">%</span></div>
+          <div class="kpi-target">Meta: 85% en 2028</div>
+        </div>
+        <div class="prog-wrap"><div class="prog-bar-bg"><div class="prog-bar" style="width:70%;background:var(--proc)"></div></div></div>
+      </div>
+      <div class="kpi-prescripcion" style="margin-top:10px;border-left-color:var(--proc)">
+        <strong style="color:var(--proc)">▶ Prescripción:</strong> La certificación ISO 27001 (hoy en 45%) es el principal factor que hospitales y EPS evalúan para confiar servicios críticos de hemocomponentes a la Cruz Roja. Elevarla al 90% en 2027 genera ventaja competitiva directa.
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-pill pill-cli">Satisfacción</span>
+    <span class="section-title">KPI de Satisfacción de Usuarios TI</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="grid-3">
+    <div class="kpi-card">
+      <div class="kpi-header"><div class="kpi-name">Índice de Satisfacción Global TI</div><span class="badge badge-amarillo"><span class="badge-dot"></span>En seguimiento</span></div>
+      <div class="kpi-values"><div class="kpi-real" style="color:var(--amarillo)">7.5<span style="font-size:1rem">/10</span></div><div class="kpi-target">Meta 9/10</div></div>
+      <div class="prog-wrap"><div class="prog-bar-bg"><div class="prog-bar" style="width:75%;background:var(--amarillo)"></div></div></div>
+      <div class="kpi-prescripcion"><strong>▶ Acción:</strong> Mesa de ayuda con SLA formal + portal de autoservicio reduce tiempos de respuesta y mejora percepción.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-header"><div class="kpi-name">% Tickets con Evaluación Positiva</div><span class="badge badge-verde"><span class="badge-dot"></span>Estable</span></div>
+      <div class="kpi-values"><div class="kpi-real" style="color:var(--verde)">80<span style="font-size:1rem">%</span></div><div class="kpi-target">Meta 90%</div></div>
+      <div class="prog-wrap"><div class="prog-bar-bg"><div class="prog-bar" style="width:80%;background:var(--verde)"></div></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-header"><div class="kpi-name">Confianza Digital Institucional</div><span class="badge badge-amarillo"><span class="badge-dot"></span>Construyendo</span></div>
+      <div class="kpi-values"><div class="kpi-real" style="color:var(--amarillo)">70<span style="font-size:1rem">%</span></div><div class="kpi-target">Meta 90%</div></div>
+      <div class="prog-wrap"><div class="prog-bar-bg"><div class="prog-bar" style="width:70%;background:var(--amarillo)"></div></div></div>
+      <div class="kpi-prescripcion"><strong>▶ Acción:</strong> SOC + ISO 27001 + comunicación institucional sobre ciberseguridad elevan percepción de confianza.</div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TAB: PROCESOS                                          -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-procesos">
+<div class="main">
+
+  <div class="section-header">
+    <span class="section-pill pill-proc">Perspectiva 3</span>
+    <span class="section-title">Procesos Internos — Excelencia Operativa y Ciberseguridad</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid-4">
+    <div class="kpi-card">
+      <div class="kpi-header"><div class="kpi-name">Cumplimiento ISO 27001</div><span class="badge badge-rojo"><span class="badge-dot"></span>Crítico</span></div>
+      <div class="kpi-values"><div class="kpi-real" style="color:var(--rojo-alerta)">45<span style="font-size:1rem">%</span></div><div class="kpi-target">Meta 2026: 70%</div></div>
+      <div class="prog-wrap"><div class="prog-bar-bg"><div class="prog-bar" style="width:45%;background:var(--rojo-alerta)"></div></div></div>
+      <div class="kpi-prescripcion"><strong>▶ Acción INMEDIATA:</strong> Nombrar CISO, implementar política escritorio limpio y DRP probado antes de Q2 2026.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-header"><div class="kpi-name">% Cumplimiento RTO/RPO Servicios Críticos</div><span class="badge badge-rojo"><span class="badge-dot"></span>Sin DRP</span></div>
+      <div class="kpi-values"><div class="kpi-real" style="color:var(--rojo-alerta)">40<span style="font-size:1rem">%</span></div><div class="kpi-target">Meta 90%</div></div>
+      <div class="prog-wrap"><div class="prog-bar-bg"><div class="prog-bar" style="width:40%;background:var(--rojo-alerta)"></div></div></div>
+      <div class="kpi-prescripcion"><strong>▶ Acción:</strong> Backups inmutables en Azure con retención 90 días. Prueba DRP semestral obligatoria.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-header"><div class="kpi-name">% Integración Sistemas (API Gateway)</div><span class="badge badge-rojo"><span class="badge-dot"></span>Islas</span></div>
+      <div class="kpi-values"><div class="kpi-real" style="color:var(--rojo-alerta)">0<span style="font-size:1rem">%</span></div><div class="kpi-target">Meta 100% en Q4 2027</div></div>
+      <div class="prog-wrap"><div class="prog-bar-bg"><div class="prog-bar" style="width:5%;background:var(--rojo-alerta)"></div></div></div>
+      <div class="kpi-prescripcion"><strong>▶ Acción:</strong> Proyecto B3: API Gateway con HL7/FHIR conecta Siesa ↔ HeVa ↔ Q-Symphony. Presupuesto: $55M.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-header"><div class="kpi-name">Cumplimiento SLA Servicios TI</div><span class="badge badge-amarillo"><span class="badge-dot"></span>Parcial</span></div>
+      <div class="kpi-values"><div class="kpi-real" style="color:var(--amarillo)">75<span style="font-size:1rem">%</span></div><div class="kpi-target">Meta 95%</div></div>
+      <div class="prog-wrap"><div class="prog-bar-bg"><div class="prog-bar" style="width:75%;background:var(--amarillo)"></div></div></div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-pill pill-proc">Riesgos</span>
+    <span class="section-title">Gestión de Riesgos TI — Radar de Amenazas Activas</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid-2">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="risk-item">
+        <div class="risk-badge risk-alto">A1</div>
+        <div class="risk-body">
+          <div class="risk-title">🔴 Ransomware — Amenaza Crítica (25% importancia)</div>
+          <div class="risk-desc">Sin CISO ni SOC, un ataque podría paralizar el Hemocentro y el Laboratorio. Sectores salud son el objetivo #1 a nivel global.</div>
+          <div class="risk-accion">⚡ Prescripción: Backups inmutables Azure + SOC + MFA como prioridad absoluta antes de cualquier digitalización nueva. Plazo: Q2 2026.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-badge risk-alto">A2</div>
+        <div class="risk-body">
+          <div class="risk-title">🔴 Sanciones Ley 1581 — Riesgo Legal (15% importancia)</div>
+          <div class="risk-desc">Datos de pacientes, donantes y estudiantes sin protección adecuada (solo 45% ISO 27001) expone a sanciones millonarias y daño reputacional.</div>
+          <div class="risk-accion">⚡ Prescripción: Auditoría de datos personales + implementar MSPI + completar controles ISO 27001. Plazo: Q4 2026.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-badge risk-medio">A3</div>
+        <div class="risk-body">
+          <div class="risk-title">🟡 Dependencia tecnológica de HeVa y Siesa (propietarios)</div>
+          <div class="risk-desc">Alto costo de cambio. Si el proveedor sube precios o descontinúa el producto, la operación queda en riesgo.</div>
+          <div class="risk-accion">⚡ Prescripción: Evaluar OpenMRS como alternativa open-source. API Gateway reduce el lock-in al crear capa neutral.</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="risk-item">
+        <div class="risk-badge risk-alto">D2</div>
+        <div class="risk-body">
+          <div class="risk-title">🔴 Servidores físicos obsoletos (>5 años)</div>
+          <div class="risk-desc">Si falla un servidor local del Hemocentro o del Laboratorio, los servicios críticos de salud se detienen sin tiempo de recuperación definido.</div>
+          <div class="risk-accion">⚡ Prescripción: Migración progresiva Cloud First (Azure híbrido) — Proyecto B2, $80M. Plazo: Q2 2027.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-badge risk-medio">A4</div>
+        <div class="risk-body">
+          <div class="risk-title">🟡 Desintermediación EdTech (SENA, Coursera)</div>
+          <div class="risk-desc">Sin portal educativo, los ingresos de $61M del Instituto están en riesgo de migrar a plataformas gratuitas.</div>
+          <div class="risk-accion">⚡ Prescripción: Portal educativo con PSE como Quick Win Q2 2028. Diferenciador: certificaciones Cruz Roja con validez internacional.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-badge risk-medio">D4</div>
+        <div class="risk-body">
+          <div class="risk-title">🟡 Sin CISO formal ni modelo de ciberseguridad integral</div>
+          <div class="risk-desc">La ausencia de un responsable de seguridad deja sin gobernanza la protección de datos clínicos y financieros.</div>
+          <div class="risk-accion">⚡ Prescripción: Designar CISO es el primer paso del PETI 2026–2030, antes de cualquier otro proyecto de digitalización.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TAB: APRENDIZAJE                                       -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-aprendizaje">
+<div class="main">
+
+  <div class="section-header">
+    <span class="section-pill pill-ap">Perspectiva 4</span>
+    <span class="section-title">Aprendizaje y Crecimiento — Talento, Cultura e Innovación TI</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid-3">
+    <div class="kpi-card">
+      <div class="kpi-header"><div class="kpi-name">Índice de Madurez Digital Institucional</div><span class="badge badge-rojo"><span class="badge-dot"></span>Brecha crítica</span></div>
+      <div class="kpi-values"><div class="kpi-real" style="color:var(--rojo-alerta)">2.8<span style="font-size:1rem">/5.0</span></div><div class="kpi-target">Meta 2030: 4.2</div></div>
+      <div class="chart-wrap-sm"><canvas id="chartMadurez"></canvas></div>
+      <div class="kpi-prescripcion"><strong>▶ Acción:</strong> Plan de microaprendizaje con Teams (O7) — capacitar personal de campo en apps institucionales sin salones presenciales.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-header"><div class="kpi-name">% Personal TI Certificado</div><span class="badge badge-amarillo"><span class="badge-dot"></span>Base</span></div>
+      <div class="kpi-values"><div class="kpi-real" style="color:var(--amarillo)">70<span style="font-size:1rem">%</span></div><div class="kpi-target">Meta: 95% ITIL/COBIT</div></div>
+      <div class="prog-wrap">
+        <div class="prog-header"><span>Certificaciones básicas</span><span style="color:var(--amarillo)">70%</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar" style="width:70%;background:var(--amarillo)"></div></div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-header"><span>ITIL 4 avanzado</span><span style="color:var(--rojo-alerta)">20%</span></div>
+        <div class="prog-bar-bg"><div class="prog-bar" style="width:20%;background:var(--rojo-alerta)"></div></div>
+      </div>
+      <div class="kpi-prescripcion"><strong>▶ Acción:</strong> Programa de recertificación ITIL 4 + COBIT 2019 con presupuesto $15M del PETI. Plazo Q1 2027.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-header"><div class="kpi-name">Prácticas COBIT/ITIL Implementadas</div><span class="badge badge-rojo"><span class="badge-dot"></span>Inicial</span></div>
+      <div class="kpi-values"><div class="kpi-real" style="color:var(--rojo-alerta)">40<span style="font-size:1rem">%</span></div><div class="kpi-target">Meta: 80%</div></div>
+      <div class="prog-wrap"><div class="prog-bar-bg"><div class="prog-bar" style="width:40%;background:var(--rojo-alerta)"></div></div></div>
+      <div class="kpi-prescripcion"><strong>▶ Acción:</strong> Documentación en SharePoint + rutas de carrera TI para retener talento y reducir riesgo de rotación.</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-pill pill-ap">Roadmap</span>
+    <span class="section-title">Línea de Tiempo Estratégica PETI 2026–2030</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-accent-ap">
+      <div class="card-label">Cronograma de Proyectos Estratégicos</div>
+      <div style="margin-top:4px">
+        <div class="timeline-item">
+          <div class="timeline-dot dot-active"></div>
+          <div class="tl-content">
+            <div class="tl-title">B7 · Gobierno de Datos Institucional</div>
+            <div class="tl-date">Q1 2026 · EN EJECUCIÓN</div>
+            <div class="tl-desc">Políticas, roles, catálogo de datos y modelo formal de gestión.</div>
+          </div>
+          <div class="tl-budget">$12M</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot dot-active"></div>
+          <div class="tl-content">
+            <div class="tl-title">B1 · Ciberseguridad Humanitaria (SOC + DRP)</div>
+            <div class="tl-date">Q2 2026 · PRIORIDAD #1</div>
+            <div class="tl-desc">Centro de Operaciones de Seguridad + autenticación multifactor + DRP semestral.</div>
+          </div>
+          <div class="tl-budget">$45M</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot dot-pend"></div>
+          <div class="tl-content">
+            <div class="tl-title">B8 · Capacitación Digital del Personal</div>
+            <div class="tl-date">Q1 2027</div>
+            <div class="tl-desc">Microaprendizaje con Teams. Elevar madurez de 2.8 a 4.2/5.0.</div>
+          </div>
+          <div class="tl-budget">$15M</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot dot-pend"></div>
+          <div class="tl-content">
+            <div class="tl-title">B2 · Migración Cloud (Infraestructura Azure)</div>
+            <div class="tl-date">Q2 2027</div>
+            <div class="tl-desc">Servidores físicos obsoletos →Azure híbrido sin CAPEX masivo.</div>
+          </div>
+          <div class="tl-budget">$80M</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot dot-pend"></div>
+          <div class="tl-content">
+            <div class="tl-title">B3 · API Gateway (Siesa ↔ HeVa ↔ Q-Symphony)</div>
+            <div class="tl-date">Q4 2027</div>
+            <div class="tl-desc">Elimina islas de información. Interoperabilidad HL7/FHIR.</div>
+          </div>
+          <div class="tl-budget">$55M</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot dot-pend"></div>
+          <div class="tl-content">
+            <div class="tl-title">B5 · Portal Educativo Transaccional + Hemocentro 4.0</div>
+            <div class="tl-date">Q2–Q4 2028</div>
+            <div class="tl-desc">PSE, certificados digitales, app móvil donantes. Trámites 90% digitales.</div>
+          </div>
+          <div class="tl-budget">$75M</div>
+        </div>
+        <div class="timeline-item" style="border-bottom:none">
+          <div class="timeline-dot dot-pend"></div>
+          <div class="tl-content">
+            <div class="tl-title">B4 · Plataforma Analítica Institucional (Data Lake + IA)</div>
+            <div class="tl-date">Q4 2030</div>
+            <div class="tl-desc">IA predictiva para stock de sangre y demanda educativa. Dashboards gerenciales.</div>
+          </div>
+          <div class="tl-budget">$60M</div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-accent-ap">
+      <div class="card-label">KPIs Meta 2030 — Estado Actual vs Objetivo</div>
+      <div class="chart-wrap" style="height:280px"><canvas id="chartRadar"></canvas></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TAB: PRESCRIPCIÓN ESTRATÉGICA                         -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-prescripcion">
+<div class="main">
+
+  <div class="section-header">
+    <span class="section-pill" style="border-color:var(--azul);color:var(--azul);background:rgba(96,165,250,0.08)">⚡ Dashboard Prescriptivo</span>
+    <span class="section-title">Recomendaciones Estratégicas para el CIO — Acciones a Tomar Ahora</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div style="background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.2);border-radius:8px;padding:14px 18px;margin-bottom:20px">
+    <p style="font-size:0.67rem;color:var(--azul);font-family:'IBM Plex Mono',monospace;letter-spacing:1px;margin-bottom:4px">¿QUÉ ES UN DASHBOARD PRESCRIPTIVO?</p>
+    <p style="font-size:0.7rem;color:var(--texto-dim);line-height:1.5">A diferencia del <strong style="color:var(--blanco)">descriptivo</strong> (¿qué pasó?) y el <strong style="color:var(--blanco)">predictivo</strong> (¿qué pasará?), el <strong style="color:var(--azul)">prescriptivo</strong> responde a <strong style="color:var(--azul)">¿qué debe hacer el CIO ahora?</strong> Combina los datos del BSC con análisis de causa-raíz para generar recomendaciones concretas y priorizadas. Es el tipo de dashboard más avanzado y es el idóneo para un CIO estratégico.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="prescripcion-box">
+      <h3>🔴 Acciones Inmediatas — Próximos 90 Días</h3>
+      <div class="prescrip-item">
+        <div class="prescrip-num">01</div>
+        <div class="prescrip-text">
+          <div class="prescrip-accion">Designar CISO y activar el SOC</div>
+          <div class="prescrip-razon">Con solo 45% de cumplimiento ISO 27001 y ransomware como amenaza #1 (25% importancia), cualquier ataque detendría el Hemocentro. El CISO debe nombrarse antes de cualquier otro proyecto. Presupuesto: incluido en $45M de ciberseguridad.</div>
+        </div>
+        <div class="prescrip-prioridad prio-1">P1</div>
+      </div>
+      <div class="prescrip-item">
+        <div class="prescrip-num">02</div>
+        <div class="prescrip-text">
+          <div class="prescrip-accion">Implementar backups inmutables en Azure (DRP)</div>
+          <div class="prescrip-razon">Los servidores físicos tienen más de 5 años y no existe DRP probado. Un fallo en el servidor del Hemocentro paraliza $771M de ingresos. Azure ya está operativo (F2) — solo se necesita activar retención inmutable a 90 días. Tiempo de implementación: 4-6 semanas.</div>
+        </div>
+        <div class="prescrip-prioridad prio-1">P1</div>
+      </div>
+      <div class="prescrip-item">
+        <div class="prescrip-num">03</div>
+        <div class="prescrip-text">
+          <div class="prescrip-accion">Establecer el Gobierno de Datos Institucional</div>
+          <div class="prescrip-razon">Sin gobierno de datos no hay analítica, ni cumplimiento Ley 1581, ni integración posible. Es la base que habilita todos los demás proyectos del PETI. Costo: $12M. Plazo: Q1 2026.</div>
+        </div>
+        <div class="prescrip-prioridad prio-1">P1</div>
+      </div>
+    </div>
+
+    <div class="prescripcion-box">
+      <h3>🟡 Acciones Estratégicas — 2027</h3>
+      <div class="prescrip-item">
+        <div class="prescrip-num">04</div>
+        <div class="prescrip-text">
+          <div class="prescrip-accion">Migrar infraestructura a Azure (Cloud First)</div>
+          <div class="prescrip-razon">Los servidores físicos obsoletos son el cuello de botella que impide alcanzar el 99.8% de disponibilidad que exige el Hemocentro. La migración progresiva con modelo pay-as-you-go elimina el riesgo sin CAPEX masivo inicial. Presupuesto: $80M.</div>
+        </div>
+        <div class="prescrip-prioridad prio-2">P2</div>
+      </div>
+      <div class="prescrip-item">
+        <div class="prescrip-num">05</div>
+        <div class="prescrip-text">
+          <div class="prescrip-accion">Construir el API Gateway con HL7/FHIR</div>
+          <div class="prescrip-razon">Siesa, HeVa y Q-Symphony operan como islas. La integración es la palanca que habilita el dato único del paciente, la analítica institucional y la interoperabilidad con hospitales aliados. Sin este paso, los proyectos de IA y Analítica son inviables. Presupuesto: $55M.</div>
+        </div>
+        <div class="prescrip-prioridad prio-2">P2</div>
+      </div>
+      <div class="prescrip-item">
+        <div class="prescrip-num">06</div>
+        <div class="prescrip-text">
+          <div class="prescrip-accion">Programa de capacitación digital (madurez 2.8 → 4.2)</div>
+          <div class="prescrip-razon">Sin apropiación tecnológica del personal, ningún sistema nuevo se usa correctamente. Microaprendizaje con Teams, sin salones presenciales, usando los smartphones que ya tienen. Presupuesto: $15M — la mejor relación costo/impacto del PETI.</div>
+        </div>
+        <div class="prescrip-prioridad prio-2">P2</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header" style="margin-top:32px">
+    <span class="section-pill" style="border-color:var(--naranja);color:var(--naranja);background:rgba(251,146,60,0.08)">Posición Estratégica</span>
+    <span class="section-title">Análisis FODA Ponderado — Posición Actual</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card" style="border-color:rgba(239,68,68,0.3)">
+      <div class="card-label" style="color:var(--rojo-alerta)">⚠️ Por qué estamos en zona de Supervivencia</div>
+      <p style="font-size:0.7rem;color:var(--texto-dim);line-height:1.6;margin-bottom:12px">Los factores internos son <strong style="color:var(--rojo-alerta)">débiles (score 0.8)</strong> mientras los externos son <strong style="color:var(--verde)">favorables (score 1.2)</strong>. Esto ubica a la organización en el cuadrante DO: las oportunidades del entorno existen pero las debilidades internas impiden aprovecharlas.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="padding:10px;background:var(--rojo-alerta-dim);border-radius:6px">
+          <div style="font-size:0.6rem;color:var(--rojo-alerta);letter-spacing:1px;margin-bottom:4px">DEBILIDADES CRÍTICAS</div>
+          <div style="font-size:0.65rem;color:var(--texto-dim);line-height:1.5">Sin CISO · 45% ISO · Servidores obsoletos · Islas de datos · Madurez 2.8</div>
+        </div>
+        <div style="padding:10px;background:var(--verde-dim);border-radius:6px">
+          <div style="font-size:0.6rem;color:var(--verde);letter-spacing:1px;margin-bottom:4px">OPORTUNIDADES A CAPTURAR</div>
+          <div style="font-size:0.65rem;color:var(--texto-dim);line-height:1.5">Azure activo · MAKAIA · Alta demanda cursos · HL7/FHIR · Decreto 767</div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-accent-proc">
+      <div class="card-label">Indicadores KPI Meta 2030 — Resumen Ejecutivo</div>
+      <div style="margin-top:6px">
+        <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--gris3)">
+          <span style="font-size:0.67rem;color:var(--texto-dim)">Disponibilidad servicios misionales</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="badge badge-rojo" style="font-size:0.55rem"><span class="badge-dot"></span>99.1%</span>
+            <span style="font-size:0.67rem;color:var(--verde);font-family:'IBM Plex Mono',monospace">→ 99.8%</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--gris3)">
+          <span style="font-size:0.67rem;color:var(--texto-dim)">Índice madurez digital</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="badge badge-rojo" style="font-size:0.55rem"><span class="badge-dot"></span>2.8/5.0</span>
+            <span style="font-size:0.67rem;color:var(--verde);font-family:'IBM Plex Mono',monospace">→ 4.2/5.0</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--gris3)">
+          <span style="font-size:0.67rem;color:var(--texto-dim)">Trámites completamente digitales</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="badge badge-rojo" style="font-size:0.55rem"><span class="badge-dot"></span>30%</span>
+            <span style="font-size:0.67rem;color:var(--verde);font-family:'IBM Plex Mono',monospace">→ 90%</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--gris3)">
+          <span style="font-size:0.67rem;color:var(--texto-dim)">Integración de sistemas</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="badge badge-rojo" style="font-size:0.55rem"><span class="badge-dot"></span>0%</span>
+            <span style="font-size:0.67rem;color:var(--verde);font-family:'IBM Plex Mono',monospace">→ 100%</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--gris3)">
+          <span style="font-size:0.67rem;color:var(--texto-dim)">Cumplimiento ISO 27001</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="badge badge-rojo" style="font-size:0.55rem"><span class="badge-dot"></span>45%</span>
+            <span style="font-size:0.67rem;color:var(--verde);font-family:'IBM Plex Mono',monospace">→ 90%</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:7px 0">
+          <span style="font-size:0.67rem;color:var(--texto-dim)">Presupuesto TI (desviación)</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="badge badge-amarillo" style="font-size:0.55rem"><span class="badge-dot"></span>67% ejec.</span>
+            <span style="font-size:0.67rem;color:var(--verde);font-family:'IBM Plex Mono',monospace">→ ≤10% desv.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+// ── TAB NAVIGATION ──
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── CHART DEFAULTS ──
+Chart.defaults.color = '#7A7A7A';
+Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+Chart.defaults.font.size = 10;
+
+// ── CHART: INGRESOS ──
+new Chart(document.getElementById('chartIngresos'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Hemocentro (60%)', 'Lotería y Otros (35%)', 'Educación (5%)'],
+    datasets: [{
+      data: [771, 408, 61],
+      backgroundColor: ['#C8102E', '#3A3A3A', '#F59E0B'],
+      borderWidth: 0,
+      hoverOffset: 6
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '68%',
+    plugins: {
+      legend: { position: 'right', labels: { boxWidth: 10, padding: 12, font: { size: 10 } } },
+      tooltip: {
+        callbacks: { label: ctx => ` $${ctx.raw}M COP` }
+      }
+    }
+  }
+});
+
+// ── CHART: MADUREZ ──
+new Chart(document.getElementById('chartMadurez'), {
+  type: 'bar',
+  data: {
+    labels: ['Actual', 'Meta 2030'],
+    datasets: [{
+      label: 'Madurez Digital',
+      data: [2.8, 4.2],
+      backgroundColor: ['#EF4444', '#10B981'],
+      borderRadius: 5, borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      y: { min: 0, max: 5, grid: { color: '#2A2A2A' }, ticks: { stepSize: 1 } },
+      x: { grid: { display: false } }
+    },
+    plugins: { legend: { display: false } }
+  }
+});
+
+// ── CHART: RADAR KPIs ──
+new Chart(document.getElementById('chartRadar'), {
+  type: 'radar',
+  data: {
+    labels: ['Disponibilidad\nServicios', 'Madurez\nDigital', 'Trámites\nDigitales', 'Integración\nSistemas', 'ISO 27001', 'Satisfacción\nUsuarios'],
+    datasets: [
+      {
+        label: 'Estado Actual 2026',
+        data: [99.1, 56, 30, 0, 45, 75],
+        borderColor: '#EF4444', backgroundColor: 'rgba(239,68,68,0.15)',
+        borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#EF4444'
+      },
+      {
+        label: 'Meta 2030',
+        data: [99.8, 84, 90, 100, 90, 95],
+        borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.1)',
+        borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#10B981',
+        borderDash: [4,3]
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    scales: {
+      r: {
+        min: 0, max: 100,
+        grid: { color: '#2A2A2A' },
+        angleLines: { color: '#2A2A2A' },
+        pointLabels: { font: { size: 9 }, color: '#7A7A7A' },
+        ticks: { display: false }
+      }
+    },
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12 } }
+    }
+  }
+});
+</script>
+</body>
+</html>
